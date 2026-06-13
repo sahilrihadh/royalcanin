@@ -1,0 +1,728 @@
+:root {
+    --primary: #e2001a;
+    --primary-dark: #880010;
+    --text-dark: #333;
+    --text-gray: #444;
+    --border: #e5e7eb;
+    --bg-light: #f9fafb;
+    --white: #fff;
+
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 30px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    --transition: all 0.3s ease;
+
+    --font-main: "D-DIN-PRO", sans-serif;
+}
+
+/* =========================
+   GLOBAL
+========================= */
+body {
+    font-family: var(--font-main);
+    background: var(--white);
+    color: var(--text-dark);
+    font-size: 16px;
+}
+
+/* ========================================
+   WELCOME PAGE STYLES  
+======================================== */
+header .gi-logo {
+    max-width: 300px;
+    height: auto;
+}
+.main-heading {
+    font-size: clamp(1.75rem, 1.2rem + 2.5vw, 2.625rem);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.content-wrapper {
+    margin-top: 5rem;
+}
+
+@media (max-width: 991px) {
+    .content-wrapper {
+        margin-top: 3rem;
+    }
+}
+
+/* --- Cat Image --- */
+.cat-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background-color: #ffffff;
+    border-radius: 75px;
+    padding: 10px;
+    border: 1px solid #fca5a5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.cat-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    filter: grayscale(100%);
+    opacity: 0.9;
+}
+
+/* --- Table Styles --- */
+.table-wrapper {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    border-collapse: collapse;
+}
+
+.custom-table thead {
+    background-color: #f9fafb;
+    color: #1f2937;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-table th {
+    padding: 12px 16px;
+    border-right: 1px solid #e5e7eb;
+}
+
+.custom-table th:last-child {
+    border-right: none;
+}
+
+.custom-table td {
+    padding: 12px 16px;
+    border-right: 1px solid #e5e7eb;
+}
+
+.custom-table td:last-child {
+    border-right: none;
+}
+
+.custom-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-table tbody tr:last-child,
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Buttons --- */
+.btn-primary-custom {
+    width: 100%;
+    max-width: 320px;
+    background-color: #e2001a;
+    color: white;
+    font-weight: 500;
+    font-size: 1.125rem;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    border: 2px solid #e2001a;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-custom:hover {
+    background-color: #880010;
+    color: white;
+}
+
+.btn-outline-custom {
+    width: 100%;
+    max-width: 320px;
+    background-color: white;
+    color: #e2001a;
+    font-weight: 500;
+    font-size: 1.125rem;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    border: 2px solid #e2001a;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+    background-color: #e2001a;
+    color: #ffffff;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 991px) {
+    .header-section {
+        margin-bottom: 2rem;
+    }
+
+    .btn-primary-custom,
+    .btn-outline-custom {
+        max-width: 100%;
+    }
+}
+
+/*****************************************
+# Register Page
+*****************************************/
+
+.register-main {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    min-height: 100vh;
+}
+.register-main:before {
+    content: "";
+    background-color: #e2001a;
+    position: absolute;
+    top: 0%;
+    left: -5%;
+    width: 55%;
+    height: 100%;
+    z-index: -1;
+    clip-path: circle(60% at 39% 37%);
+}
+
+.register-sidebar {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+.register-sidebar:before {
+    content: "";
+    background: url("../img/puppy-register.png");
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 100%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+}
+.heading-box {
+    max-width: 500px;
+}
+.heading-box h2 {
+    font-size: 62px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.heading-box p {
+    font-size: 18px;
+}
+.dr-profile {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    align-items: center;
+}
+.profile-img {
+    max-width: 30%;
+}
+.profile-content {
+    width: 70%;
+}
+.profile-content .profile-name {
+    font-size: 32px;
+    line-height: 32px;
+    font-weight: 700;
+}
+.profile-content .profile-degree {
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.webinar-info {
+    margin-top: 40px;
+}
+.webinar-info h4 span {
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.webinar-info h4 {
+    font-size: 24px;
+}
+
+.register-wrapper img {
+    max-width: 260px;
+}
+
+.form-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary);
+}
+.form .input-group .input-group-text {
+    padding: 0px;
+    border: none;
+}
+.form .input-group .input-group-text .form-select {
+    background-color: #e2001a;
+    color: #fff;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.form .form-select {
+    padding: 0.65rem 2.25rem 0.65rem 0.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.343 4 3.204 4h9.592c.861 0 1.319 1.013.753 1.658L8.753 11.14a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+}
+
+.form .form-control {
+    padding: 0.6rem 0.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+    border-color: #e2001a;
+}
+
+.btn-site {
+    background-color: #e2001a;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 30px;
+    min-width: 150px;
+}
+.form-check a {
+    color: #e2001a;
+}
+
+.custom-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #e2001a;
+    cursor: pointer;
+}
+
+.custom-check:checked {
+    background-color: #e2001a;
+    border-color: #e2001a;
+}
+
+.custom-check:focus {
+    box-shadow: none;
+    border-color: #e2001a;
+}
+
+label.error {
+    color: red;
+    display: inline;
+}
+
+@media (max-width: 767px) {
+    .heading-box h2 {
+        font-size: 42px;
+    }
+    .profile-content .profile-name {
+        font-size: 24px;
+        line-height: 24px;
+    }
+    .profile-content .profile-degree {
+        font-size: 18px;
+        line-height: 18px;
+    }
+    .sticky-sidebar {
+        background: #e2001a;
+    }
+    .register-main:before,
+    .register-sidebar:before {
+        display: none;
+    }
+}
+
+/* ========================================
+   THANK YOU PAGE STYLES
+======================================== */
+
+.thankyou-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* --- Main Title --- */
+.thankyou-title {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-weight: 700;
+    font-size: 4.5rem;
+    line-height: 0.9;
+    letter-spacing: -1px;
+}
+.thankyou-title .text-gray {
+    font-size: 42px;
+    font-weight: 400;
+}
+.text-red {
+    color: #e2001a;
+}
+
+.text-gray {
+    color: #444444;
+}
+
+@media (max-width: 768px) {
+    .thankyou-title {
+        font-size: 3rem;
+    }
+}
+
+/* --- Content Text --- */
+.content-text p {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .content-text p {
+        font-size: 1rem;
+    }
+}
+
+/* --- What's Next Section --- */
+.whats-next-section {
+    margin-top: 2.5rem;
+}
+
+.whats-next-title {
+    font-weight: 400;
+    font-size: 42px;
+    color: #e2001a;
+    margin-bottom: 1rem;
+}
+
+.whats-next-box {
+    background-color: #f3f4f6;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+}
+
+.whats-next-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.whats-next-list li {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-size: 1rem;
+    color: #333;
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.whats-next-list li::before {
+    content: "*";
+    color: #666;
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .whats-next-title {
+        font-size: 2rem;
+    }
+    .whats-next-box {
+        padding: 1.5rem;
+    }
+}
+
+.thankyou-container {
+    position: relative;
+    z-index: 0;
+}
+.thankyou-container:before {
+    content: "";
+    background-image: url("../img/walking-cat.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 90%;
+    width: 50%;
+    position: absolute;
+    left: 49%;
+    top: 50%;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+}
+
+/* --- Quote Box --- */
+.quote-box {
+    max-width: 400px;
+    background: white;
+    border: 1px solid #e2001a;
+    border-radius: 30px 30px 30px 0;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.quote-title {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: #e2001a;
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.quote-text {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    margin-top: 0.5rem !important;
+}
+
+@media (max-width: 991px) {
+    .quote-box {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 2rem;
+        border-radius: 30px;
+    }
+}
+
+/* ========================================
+   LOGIN PAGE STYLES
+======================================== */
+
+.login-main {
+    background-image: url("../img/login-bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+/* --- Header --- */
+.header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    padding: 20px 40px;
+}
+
+.royal-canin-logo {
+    max-width: 180px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .royal-canin-logo {
+        max-width: 120px;
+    }
+    .header {
+        padding: 15px 20px;
+    }
+}
+
+/* --- Login Main Section --- */
+.login-main {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0 40px 0;
+}
+
+/* --- Dog Image (Left) --- */
+.dog-image-wrapper {
+    height: 100%;
+    min-height: 500px;
+    overflow: hidden;
+}
+
+/* --- Login Wrapper --- */
+.login-wrapper {
+    padding: 20px 30px;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- GI Horizons Logo --- */
+.gi-logo-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.gi-logo {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+}
+
+/* --- Login Box (Red Border) --- */
+.login-box {
+    border: 1px solid #e2001a;
+    border-radius: 20px 20px 20px 0;
+    padding: 40px 30px;
+    background-color: white;
+    position: relative;
+}
+
+/* --- Form Title --- */
+.login-box .form-title {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* --- Custom Input --- */
+.custom-input {
+    border: 1px solid #999;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: "D-DIN-PRO", sans-serif;
+    font-size: 1rem;
+    background-color: #f9fafb;
+}
+
+.custom-input:focus {
+    border-color: #e2001a;
+    box-shadow: 0 0 0 0.25rem rgba(220, 38, 38, 0.1);
+    background-color: white;
+}
+
+/* --- Submit Button --- */
+.btn-site {
+    background-color: #e2001a;
+    color: white;
+    font-family: "D-DIN-PRO", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-site:hover {
+    background-color: #880010;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Alert Messages --- */
+.alert {
+    border-radius: 8px;
+    font-family: "D-DIN-PRO", sans-serif;
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.alert-warning {
+    background-color: #fef3c7;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+/* --- Redirect Link --- */
+.redirect-link {
+    font-family: "D-DIN-PRO", sans-serif;
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 20px;
+}
+
+.redirect-link a {
+    color: #e2001a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.redirect-link a:hover {
+    text-decoration: underline;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 991px) {
+    .dog-image-wrapper,
+    .puppy-image-wrapper {
+        min-height: 300px;
+    }
+    .dog-image-wrapper img,
+    .puppy-image-wrapper img {
+        min-height: 300px;
+    }
+    .login-box {
+        padding: 30px 20px;
+    }
+    .gi-logo {
+        max-width: 250px;
+    }
+    .form-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-wrapper {
+        padding: 10px;
+    }
+    .login-box {
+        border-radius: 15px 15px 15px 0;
+        padding: 25px 15px;
+    }
+    .gi-logo {
+        max-width: 200px;
+        margin: 0 auto;
+    }
+    .gi-logo-wrapper {
+        justify-content: center;
+    }
+    .form-title {
+        font-size: 1.8rem;
+    }
+    .dog-image-wrapper,
+    .puppy-image-wrapper {
+        min-height: 200px;
+    }
+    .dog-image-wrapper img,
+    .puppy-image-wrapper img {
+        min-height: 200px;
+    }
+}

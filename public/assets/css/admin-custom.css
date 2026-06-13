@@ -1,0 +1,123 @@
+.btn-card,
+.table-link {
+    text-decoration: none;
+}
+
+body {
+    font-family: "Figtree", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Figtree", sans-serif;
+}
+
+.notification-text {
+    text-align: right;
+    display: inline-block;
+    width: 25%;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.table-link {
+    color: #000;
+    font-size: 18px;
+}
+
+.table-link .fas {
+    padding-right: 5px;
+}
+
+.resource-table tr td:not(:first-child),
+.resource-table tr th:not(:first-child) {
+    text-align: center;
+}
+
+.btn {
+    text-transform: uppercase;
+}
+
+label.error {
+    color: red !important;
+    font-size: 12px;
+    margin-top: 5px;
+    line-height: 16px;
+    display: block;
+}
+
+.btn-logout {
+    background: 0 0;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 6px 12px;
+    font-weight: 300;
+}
+
+.btn-logout:hover {
+    background: #fff;
+    color: #2b2b2b;
+}
+
+td.actions {
+    min-width: 100px;
+}
+
+.poll-card {
+    border: 1px solid #d1d1d1;
+    padding-bottom: 30px;
+}
+
+.poll-card .progress {
+    display: flex;
+    height: 25px;
+    overflow: hidden;
+    font-size: 0.75rem;
+    background-color: #dedede;
+    border-radius: 0;
+}
+
+.progress.correct_answer {
+    border: 2px solid green;
+}
+
+.custom-modal .modal-header {
+    padding: 0 1rem;
+}
+
+.custom-modal .close {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 30px;
+    color: #dc3545;
+}
+
+.glowing-dot {
+    height: 16px;
+    width: 16px;
+    background: green;
+    display: inline-block;
+    border-radius: 50%;
+    margin-left: 10px;
+    box-shadow: 0 0 10px 3px rgb(43 86 7 / 50%);
+    vertical-align: middle;
+}
+
+.buttons-excel {
+    margin-left: 30px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-header .card-title,
+.card-header h5 {
+    margin: 0;
+}
