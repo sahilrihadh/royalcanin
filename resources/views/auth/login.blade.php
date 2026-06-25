@@ -15,14 +15,49 @@
    <!----------------- stylesheets ------------------------>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/login.min.css') }}">
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
    <!-- Alpine.js & Axios -->
    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <!-- jQuery for autocomplete -->
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
    <style>
       [x-cloak] {
          display: none !important;
+      }
+      
+      .ui-autocomplete {
+         max-height: 200px;
+         overflow-y: auto;
+         overflow-x: hidden;
+         z-index: 1000;
+         background: white;
+         border: 1px solid #ddd;
+         border-radius: 4px;
+         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .ui-menu-item {
+         padding: 8px 12px;
+         cursor: pointer;
+      }
+      
+      .ui-menu-item:hover {
+         background-color: #f0f0f0;
+      }
+      
+      .ui-state-focus {
+         background-color: #e0e0e0 !important;
+         border: none !important;
+      }
+      
+      .city-hint {
+         font-size: 0.75rem;
+         color: #6c757d;
+         margin-top: 0.25rem;
       }
    </style>
 </head>
@@ -41,7 +76,7 @@
    </header>
 
    <!-- Main Login Section with Alpine.js -->
-   <main class="login-main" x-data="loginForm()" x-cloak>
+   <main class="login-main" x-data="loginForm()" x-init="initAutocomplete()" x-cloak>
       <div class="container-fluid">
          <div class="row g-0 min-vh-75 align-items-center">
 
@@ -79,6 +114,28 @@
                            </template>
                         </div>
 
+                        <!-- City Input with Autocomplete -->
+                        <div class="mb-4">
+                           <label class="form-label">City/Town</label>
+                           <div class="city-input-wrapper">
+                              <input type="text" 
+                                     id="citySelect" 
+                                     x-model="form.city" 
+                                     class="form-control custom-input" 
+                                     placeholder="Search or type city name"
+                                     @input="onCityInput()">
+                              <div class="city-hint" x-show="!citySelected && form.city">
+                                 <i class="bi bi-info-circle"></i> Type to search from database or enter manually
+                              </div>
+                              <div class="city-hint text-success" x-show="citySelected">
+                                 <i class="bi bi-check-circle"></i> City found in database
+                              </div>
+                           </div>
+                           <template x-if="errors.city">
+                              <div class="text-danger small mt-1" x-text="errors.city[0]"></div>
+                           </template>
+                        </div>
+
                         <div class="mt-4">
                            <button type="submit" class="btn btn-site w-100" :disabled="loading" x-text="loading ? 'Processing...' : 'Submit'"></button>
                         </div>
@@ -99,101 +156,178 @@
 
    <script>
       function loginForm() {
-         return {
-            form: {
-               email_id: '',
-            },
-            errors: {},
-            loading: false,
-            message: {
-               show: false,
-               type: 'success',
-               text: ''
-            },
+   return {
+      form: {
+         email_id: '',
+         city: '',
+      },
+      errors: {},
+      loading: false,
+      message: {
+         show: false,
+         type: 'success',
+         text: ''
+      },
+      citySelected: false,
 
-            submitForm() {
-               // Reset previous errors and messages
-               this.loading = true;
-               this.errors = {};
-               this.message.show = false;
+      submitForm() {
+         // Reset previous errors and messages
+         this.loading = true;
+         this.errors = {};
+         this.message.show = false;
 
-               // Basic client-side validation
-               if (!this.form.email_id) {
-                  this.message.type = 'danger';
-                  this.message.text = 'Please enter your email address.';
-                  this.message.show = true;
-                  this.loading = false;
-                  return;
-               }
-
-               if (!this.isValidEmail(this.form.email_id)) {
-                  this.message.type = 'danger';
-                  this.message.text = 'Please enter a valid email address.';
-                  this.message.show = true;
-                  this.loading = false;
-                  return;
-               }
-
-               // Set CSRF token for Axios
-               axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-               axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-               // Make API request
-               axios.post('{{ route("login.process") }}', this.form)
-                  .then(response => {
-                     if (response.data.success) {
-                        this.message.type = 'success';
-                        this.message.text = response.data.message + ' Redirecting...';
-                        this.message.show = true;
-
-                        // Redirect after delay
-                        setTimeout(() => {
-                           window.location.href = response.data.redirect_url;
-                        }, 1000);
-                     } else {
-                        this.message.type = 'danger';
-                        this.message.text = response.data.message;
-                        this.message.show = true;
-                     }
-                  })
-                  .catch(error => {
-                     let errorMsg = 'An error occurred. Please try again.';
-
-                     if (error.response) {
-                        // Handle validation errors
-                        if (error.response.status === 422 && error.response.data.errors) {
-                           this.errors = error.response.data.errors;
-                           errorMsg = 'Please fix the errors below.';
-                        }
-                        // Handle authentication errors
-                        else if (error.response.status === 401) {
-                           errorMsg = error.response.data.message || 'Invalid email address. Please register first.';
-                        }
-                        // Handle other errors
-                        else if (error.response.data && error.response.data.message) {
-                           errorMsg = error.response.data.message;
-                        }
-                     } else if (error.request) {
-                        errorMsg = 'No response from server. Please check your connection.';
-                     } else {
-                        errorMsg = error.message;
-                     }
-
-                     this.message.type = 'danger';
-                     this.message.text = errorMsg;
-                     this.message.show = true;
-                  })
-                  .finally(() => {
-                     this.loading = false;
-                  });
-            },
-
-            isValidEmail(email) {
-               const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
-               return emailRegex.test(email);
-            }
+         // Basic client-side validation
+         if (!this.form.email_id) {
+            this.message.type = 'danger';
+            this.message.text = 'Please enter your email address.';
+            this.message.show = true;
+            this.loading = false;
+            return;
          }
+
+         if (!this.isValidEmail(this.form.email_id)) {
+            this.message.type = 'danger';
+            this.message.text = 'Please enter a valid email address.';
+            this.message.show = true;
+            this.loading = false;
+            return;
+         }
+
+         // Validate city
+         if (!this.form.city) {
+            this.message.type = 'danger';
+            this.message.text = 'Please enter your city/town.';
+            this.message.show = true;
+            this.loading = false;
+            return;
+         }
+
+         // Set CSRF token for Axios
+         axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+         // Log the data being sent
+         console.log('Sending data:', {
+            email_id: this.form.email_id,
+            city: this.form.city
+         });
+
+         // Make API request with city data
+         axios.post('{{ route("login") }}', {
+            email_id: this.form.email_id,
+            city: this.form.city
+         })
+         .then(response => {
+            console.log('Response:', response.data);
+            if (response.data.success) {
+               this.message.type = 'success';
+               this.message.text = response.data.message + ' Redirecting...';
+               this.message.show = true;
+
+               setTimeout(() => {
+                  window.location.href = response.data.redirect_url;
+               }, 1000);
+            } else {
+               this.message.type = 'danger';
+               this.message.text = response.data.message;
+               this.message.show = true;
+            }
+         })
+         .catch(error => {
+            console.error('Error:', error);
+            let errorMsg = 'An error occurred. Please try again.';
+
+            if (error.response) {
+               console.log('Error response:', error.response.data);
+               if (error.response.status === 422 && error.response.data.errors) {
+                  this.errors = error.response.data.errors;
+                  errorMsg = 'Please fix the errors below.';
+               } else if (error.response.status === 401) {
+                  errorMsg = error.response.data.message || 'Invalid email address. Please register first.';
+               } else if (error.response.data && error.response.data.message) {
+                  errorMsg = error.response.data.message;
+               }
+            } else if (error.request) {
+               errorMsg = 'No response from server. Please check your connection.';
+            } else {
+               errorMsg = error.message;
+            }
+
+            this.message.type = 'danger';
+            this.message.text = errorMsg;
+            this.message.show = true;
+         })
+         .finally(() => {
+            this.loading = false;
+         });
+      },
+
+      isValidEmail(email) {
+         const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+         return emailRegex.test(email);
+      },
+
+      onCityInput() {
+         this.citySelected = false;
+      },
+
+      initAutocomplete() {
+         const self = this;
+         
+         $("#citySelect").autocomplete({
+            source: function(request, response) {
+               if (request.term.length < 2) {
+                  response([]);
+                  return;
+               }
+               
+               $.ajax({
+                  url: "{{ route('fetch.cities') }}",
+                  dataType: "json",
+                  data: {
+                     term: request.term
+                  },
+                  success: function(data) {
+                     if (data.length === 0) {
+                        response([]);
+                        return;
+                     }
+                     
+                     response($.map(data, function(item) {
+                        return {
+                           label: item.city_name + (item.state_name ? ', ' + item.state_name : ''),
+                           value: item.city_name
+                        };
+                     }));
+                  },
+                  error: function() {
+                     response([]);
+                  }
+               });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+               self.form.city = ui.item.value;
+               self.citySelected = true;
+               $(this).val(ui.item.value);
+               return false;
+            },
+            change: function(event, ui) {
+               if (!ui.item) {
+                  const typedValue = $(this).val();
+                  if (typedValue) {
+                     self.form.city = typedValue;
+                     self.citySelected = false;
+                  } else {
+                     self.form.city = '';
+                     self.citySelected = false;
+                  }
+               }
+            }
+         });
       }
+   }
+}
    </script>
 
 </body>

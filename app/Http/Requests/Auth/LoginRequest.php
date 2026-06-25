@@ -20,6 +20,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email_id' => ['required', 'string', 'email'],
+            'city' => ['nullable', 'string', 'max:255'],
         ];
     }
 

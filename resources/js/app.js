@@ -1,23 +1,25 @@
 import Alpine from "alpinejs";
 import axios from "axios";
+import "./echo";
 
-window.axios = axios;
+// Globals
 window.Alpine = Alpine;
-
+window.axios = axios;
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-// Set CSRF token for all Axios requests
 const token = document.head.querySelector('meta[name="csrf-token"]');
 if (token) {
     window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+    window.csrfToken = token.content;
 }
 
-Alpine.start();
+// Helper: run callback when Echo is ready
+window.__onEchoReady = function (callback) {
+    if (window.Echo) {
+        callback();
+    } else {
+        window.addEventListener("echo-ready", callback, { once: true });
+    }
+};
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allow your team to quickly build robust real-time web applications.
- */
-
-import './echo';
+document.addEventListener("DOMContentLoaded", () => Alpine.start());

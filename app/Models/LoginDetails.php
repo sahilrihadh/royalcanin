@@ -9,6 +9,7 @@ class LoginDetails extends Model
     use HasFactory;
 
     protected $fillable = [
+        'city',
         'user_id',
         'login_time',
         'logout_time'

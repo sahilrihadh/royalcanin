@@ -116,17 +116,29 @@
                            </template>
                         </div>
 
+                        <!-- City Dropdown with Autocomplete -->
                         <div class="col-md-6 city-dropdown mt-3">
-                           <input type="text" class="form-control" id="citySelect" x-model="form.city" placeholder="City/Town *">
+                           <input type="text" class="form-control" id="citySelect" 
+                                  x-model="form.city" 
+                                  placeholder="City/Town *"
+                                  @input="onCityInput()">
                            <template x-if="errors.city">
                               <div class="text-danger small" x-text="errors.city[0]"></div>
                            </template>
                         </div>
+
+                        <!-- State Input - Auto-filled or Manual -->
                         <div class="col-md-6 mt-3">
-                           <input type="text" x-model="form.state" class="form-control" placeholder="State *">
+                           <input type="text" x-model="form.state" 
+                                  class="form-control" 
+                                  placeholder="State *"
+                                  :readonly="stateReadonly"
+                                  :class="{'bg-light': stateReadonly}">
                            <template x-if="errors.state">
                               <div class="text-danger small" x-text="errors.state[0]"></div>
                            </template>
+                           <small class="text-muted" x-show="stateReadonly">State auto-filled from city selection</small>
+                           <small class="text-muted" x-show="!stateReadonly">Enter state manually</small>
                         </div>
                      </div>
 
@@ -194,6 +206,8 @@
                type: 'success',
                text: ''
             },
+            stateReadonly: false,
+            citySelected: false,
 
             submitForm() {
                this.loading = true;
@@ -235,13 +249,61 @@
                   });
             },
 
+            onCityInput() {
+               // Reset state when user types in city
+               if (!this.citySelected) {
+                  this.stateReadonly = false;
+                  this.form.state = '';
+               }
+               this.citySelected = false;
+            },
+
             initAutocomplete() {
+               const self = this;
+               
                $("#citySelect").autocomplete({
-                  source: "{{ route('fetch.cities') }}",
+                  source: function(request, response) {
+                     $.ajax({
+                        url: "{{ route('fetch.cities') }}",
+                        dataType: "json",
+                        data: {
+                           term: request.term
+                        },
+                        success: function(data) {
+                           response($.map(data, function(item) {
+                              return {
+                                 label: item.city_name + ', ' + item.state_name,
+                                 value: item.city_name,
+                                 state: item.state_name
+                              };
+                           }));
+                        }
+                     });
+                  },
                   minLength: 2,
-                  select: (event, ui) => {
-                     this.form.city = ui.item.value;
-                     this.form.state = ui.item.state;
+                  select: function(event, ui) {
+                     self.form.city = ui.item.value;
+                     self.form.state = ui.item.state;
+                     self.stateReadonly = true;
+                     self.citySelected = true;
+                     
+                     // Update the input field value
+                     $(this).val(ui.item.value);
+                     
+                     return false;
+                  },
+                  change: function(event, ui) {
+                     if (!ui.item) {
+                        // User typed something not in the list
+                        self.stateReadonly = false;
+                        self.citySelected = false;
+                        // Keep the city value as typed
+                        self.form.city = $(this).val();
+                        // Clear state for manual entry
+                        if (!self.form.state) {
+                           self.form.state = '';
+                        }
+                     }
                   }
                });
             }
@@ -252,6 +314,28 @@
    <style>
       [x-cloak] {
          display: none !important;
+      }
+      
+      /* Custom styles for autocomplete */
+      .ui-autocomplete {
+         max-height: 200px;
+         overflow-y: auto;
+         overflow-x: hidden;
+         z-index: 1000;
+      }
+      
+      .ui-menu-item {
+         padding: 8px 12px;
+         cursor: pointer;
+      }
+      
+      .ui-menu-item:hover {
+         background-color: #f0f0f0;
+      }
+      
+      .ui-state-focus {
+         background-color: #e0e0e0 !important;
+         border: none !important;
       }
    </style>
 </body>

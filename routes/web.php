@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\LoginDetailController;
 use App\Http\Controllers\Admin\PreviousSessionController;
 use App\Http\Controllers\Admin\AnnouncementController;
+
 
 // ==================== PUBLIC ROUTES ====================
 
@@ -129,3 +131,7 @@ Route::middleware('auth')->group(function () {
 Route::fallback(function () {
     return redirect()->route('home');
 });
+
+
+Route::get('/fetch-cities', [CityController::class, 'fetchCities'])->name('fetch.cities');
+Route::get('/login-city-stats', [AuthenticatedSessionController::class, 'getCityStats'])->name('login.city.stats');
