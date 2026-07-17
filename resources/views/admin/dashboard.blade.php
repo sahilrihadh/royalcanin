@@ -65,7 +65,7 @@
               <tr>
                 <td>{{ $user->full_name }}</td>
                 <td>{{ $user->email_id }}</td>
-                <td>{{ $user->created_at->format('d M Y') }}</td>
+                <td>{{ $user->created_at?->format('d M Y') ?? 'N/A' }}</td>
               </tr>
               @endforeach
             </tbody>
@@ -94,7 +94,7 @@
               <tr>
                 <td>{{ $activity->name ?? 'N/A' }}</td>
                 <td>{{ $activity->session_name }}</td>
-                <td>{{ $activity->watched_on ? \Carbon\Carbon::parse($activity->watched_on)->format('d M Y H:i') : 'N/A' }}</td>
+                <td>{{ isset($activity->watched_on) ? \Carbon\Carbon::parse($activity->watched_on)->format('d M Y H:i') : 'N/A' }}</td>
               </tr>
               @endforeach
             </tbody>
