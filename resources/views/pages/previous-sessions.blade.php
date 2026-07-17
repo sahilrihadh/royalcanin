@@ -63,6 +63,27 @@
       </div>
     </div>
   </div><!-- end row -->
+  <div class="row justify-content-center mb-lg-5 mb-md-4 mb-4">
+        <div class="col-lg-4 mb-12 glit-grid align-self-center text-center">
+        <!-- Replace with custom m3u8 player -->
+        <div class="video-thumbnail" onclick="playVideo('webinar2', event)">
+            <img src="assets/img/video-thumb.jpg" class="img-fluid" alt="Webinar 2 Thumbnail" />
+            <div class="play-button-overlay">▶</div>
+        </div>
+        <!-- Hidden video container for m3u8 -->
+        <div id="webinar2-player" class="video-container" style="display: none;"></div>
+        </div><!-- end col-->
+    <div class="col-lg-6 col-md-12 col-12 align-self-center mt-lg-0 mt-md-4 mt-4">
+      <div class="doc-card">
+        <h2>WEBINAR 2</h2>
+        <h3>Hungry, hungry doggo- The EPI edition</h3>
+        <div class="date-wrapper">
+          <h4>Date : 26<sup>th</sup> June 2026, 07:00 pm (IST)</h4>
+          <!-- <h4><a href="https://royalcanin.sociolive.in/assets/notes/Pancreatitis_Umesh_March_2026.pdf" download class="btn btn-success mt-3" target="_blank">Download Notes</a></h4> -->
+        </div>
+      </div>
+    </div><!-- end col-->
+</row>
 </div>
 @endsection
 
@@ -76,6 +97,7 @@
   // Video URLs for m3u8 videos
   const m3u8Urls = {
     webinar1: 'https://customer-1x23yh7nrl2vignp.cloudflarestream.com/ee1533a6e74c42a23064000a74bcc4b3/manifest/video.m3u8',
+    webinar2: 'https://customer-1x23yh7nrl2vignp.cloudflarestream.com/e90433a288c3294c28ea6b36227a61ff/manifest/video.m3u8',
   };
 
   // Store active HLS instances
@@ -91,7 +113,7 @@
     });
     activeHlsInstances = [];
 
-    const m3u8Ids = ['webinar1'];
+    const m3u8Ids = ['webinar1', 'webinar2'];
 
     m3u8Ids.forEach(id => {
       if (id !== exceptId) {

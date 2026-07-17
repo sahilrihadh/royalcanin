@@ -9,7 +9,7 @@
     <h5>Announcements</h5>
     <a href="{{ route('admin.announcements.create') }}" class="btn btn-primary btn-sm float-end">Create New Announcement</a>
   </div>
-  <div class="card-body">
+  <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-bordered table-striped">
         <thead>
@@ -35,7 +35,7 @@
             </td>
             <td>{{ $announcement->created_at ? $announcement->created_at->format('Y-m-d H:i') : 'N/A' }}</td>
             <td>
-              <a href="{{ route('admin.announcements.edit', $announcement->id) }}" class="btn btn-info btn-sm">Edit</a>
+              <a href="{{ route('admin.announcements.edit', $announcement->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
               
               @if($announcement->status === 'show')
                 <button type="button" class="btn btn-warning btn-sm toggle-status" 
@@ -47,14 +47,14 @@
                 <button type="button" class="btn btn-success btn-sm toggle-status" 
                         data-id="{{ $announcement->id }}"
                         data-current-status="hide">
-                  <i class="fas fa-eye"></i> Show
+                  <i class="fas fa-eye"></i>
                 </button>
               @endif
               
               <button type="button" class="btn btn-danger btn-sm delete-announcement" 
                       data-id="{{ $announcement->id }}"
                       data-title="{{ $announcement->title }}">
-                <i class="fas fa-trash"></i> Delete
+                <i class="fas fa-trash"></i>
               </button>
             </td>
           </tr>

@@ -59,6 +59,7 @@
 @include('partials.poll-sidebar')
 @include('partials.question-sidebar')
 @include('partials.announcement-modal')
+@include('partials.previous-session-modal')
 @endsection
 
 @push('scripts')
@@ -336,5 +337,13 @@
     } else {
         window.addEventListener('echo-ready', () => $(document).ready(bootAll), { once: true });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    var previousSessionModalEl = document.getElementById('previousSessionModal');
+    if (previousSessionModalEl) {
+        var previousSessionModal = new bootstrap.Modal(previousSessionModalEl);
+        previousSessionModal.show();
+    }
+});
 </script>
 @endpush

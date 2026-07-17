@@ -7,48 +7,44 @@
 <!-- Stats Cards -->
 <div class="row mb-4">
   <div class="col-md-3">
-    <div class="card bg-primary text-white h-100">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="mb-0">Total Users</h6>
+    <div class="card stats-card h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+            <h6 class="mb-2">Total Users</h6>
             <h2 class="mb-0">{{ $totalUsers }}</h2>
-          </div>
-          <i class="fas fa-users fa-2x"></i>
+            <small>&nbsp;</small>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <div class="col-md-3">
-    <div class="card bg-success text-white">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="mb-0">Online Users</h6>
+<div class="col-md-3">
+    <div class="card stats-card h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+            <h6 class="mb-2">Online Users</h6>
             <h2 class="mb-0">{{ $onlineUsers }}</h2>
             <small>Active in last 5 min</small>
-          </div>
-          <i class="fas fa-circle fa-2x" style="font-size: 2rem;"></i>
         </div>
-      </div>
     </div>
-  </div>
+</div>  
 </div>
 
 <div class="card">
   <div class="card-header">
-    <h5>All Users</h5>
+      <h5>All Users</h5>
+      <a href="{{ route('admin.users.export') }}" class="btn btn-success">
+          <i class="fas fa-file-excel"></i> Download Excel
+      </a>  
   </div>
-  <div class="card-body">
+  <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
             <th>Mobile</th>
+            <th>Clinic Name</th>
+            <th>Registration Number</th>
             <th>City</th>
             <th>State</th>
             <th>Status</th>
@@ -67,6 +63,8 @@
             <td>{{ $user->full_name }}</td>
             <td>{{ $user->email_id }}</td>
             <td>{{ $user->mobile_number }}</td>
+            <td>{{ $user->clinic_name ?? '-' }}</td>
+            <td>{{ $user->registration_number ?? '-' }}</td>
             <td>{{ $user->city ?? '-' }}</td>
             <td>{{ $user->state ?? '-' }}</td>
             <td>
@@ -81,15 +79,14 @@
             <td>{{ $user->created_at->format('d M Y') }}</td>
             <td>
               @if(!$isOnline)
-              <button class="btn btn-sm btn-danger delete-user"
+              <button class="btn btn-sm btn delete-user"
                 data-id="{{ $user->id }}"
                 data-name="{{ $user->full_name }}">
                 <i class="fas fa-trash"></i> Delete
               </button>
               @else
-              <button class="btn btn-sm btn-secondary" disabled title="Cannot delete online user">
-                <i class="fas fa-trash"></i> Delete
-              </button>
+              <button class="btn" disabled title="Cannot delete online user">
+                <i class="fas fa-trash"></i></button>
               @endif
             </td>
           </tr>
@@ -201,32 +198,4 @@
     }
   });
 </script>
-
-<style>
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  .table-hover tbody tr:hover {
-    background-color: #f5f5f5;
-  }
-
-  .badge .fa-circle {
-    font-size: 8px;
-    vertical-align: middle;
-  }
-
-  .btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-</style>
 @endpush

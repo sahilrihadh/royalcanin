@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -56,4 +58,10 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function export()
+{
+    $users = User::all(); // Or use your filtered query
+    return Excel::download(new UsersExport($users), 'users_export_' . date('Y-m-d_H-i') . '.xlsx');
+}
 }

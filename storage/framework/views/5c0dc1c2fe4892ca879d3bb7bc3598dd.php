@@ -57,6 +57,7 @@
 <?php echo $__env->make('partials.poll-sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php echo $__env->make('partials.question-sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php echo $__env->make('partials.announcement-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php echo $__env->make('partials.previous-session-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
@@ -334,6 +335,14 @@
     } else {
         window.addEventListener('echo-ready', () => $(document).ready(bootAll), { once: true });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    var previousSessionModalEl = document.getElementById('previousSessionModal');
+    if (previousSessionModalEl) {
+        var previousSessionModal = new bootstrap.Modal(previousSessionModalEl);
+        previousSessionModal.show();
+    }
+});
 </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/sahilrihadh/Development/royalcanin/webinar-solution/resources/views/pages/webcast.blade.php ENDPATH**/ ?>

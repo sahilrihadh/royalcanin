@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\LoginDetailController;
 use App\Http\Controllers\Admin\PreviousSessionController;
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
 // ==================== PUBLIC ROUTES ====================
@@ -61,10 +62,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Users Management
         Route::get('users', [UserController::class, 'index'])->name('users');
+        Route::get('users/export', [UserController::class, 'export'])->name('users.export');
         Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
         // Questions Management
         Route::get('questions', [QuestionController::class, 'index'])->name('questions');
+        Route::get('questions/export', [QuestionController::class, 'export'])->name('questions.export');
         Route::get('questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
         Route::post('questions/{id}/answer', [QuestionController::class, 'answer'])->name('questions.answer');
         Route::delete('questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
@@ -72,29 +75,34 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Login Details Routes
         Route::get('login-details', [LoginDetailController::class, 'index'])->name('login-details.index');
-        Route::get('login-details/{id}', [LoginDetailController::class, 'show'])->name('login-details.show');
-        Route::get('login-details/export/csv', [LoginDetailController::class, 'export'])->name('login-details.export');
+        Route::get('login-details/export', [LoginDetailController::class, 'export'])->name('login-details.export');
         Route::delete('login-details/{id}', [LoginDetailController::class, 'destroy'])->name('login-details.destroy');
         Route::post('login-details/bulk-delete', [LoginDetailController::class, 'bulkDelete'])->name('login-details.bulk-delete');
         Route::post('login-details/clear-old', [LoginDetailController::class, 'clearOldRecords'])->name('login-details.clear-old');
+        Route::get('login-details/attendance', [LoginDetailController::class, 'attendance'])
+    ->name('login-details.attendance');
+    Route::get('login-details/attendance/export', [LoginDetailController::class, 'exportAttendance'])
+    ->name('login-details.export-attendance');
 
         // Previous Sessions Routes
         Route::get('previous-sessions', [PreviousSessionController::class, 'index'])->name('previous-sessions.index');
-        Route::get('previous-sessions/{id}', [PreviousSessionController::class, 'show'])->name('previous-sessions.show');
-        Route::post('previous-sessions/{id}/resend-certificate', [PreviousSessionController::class, 'resendCertificate'])->name('previous-sessions.resend-certificate');
-        Route::delete('previous-sessions/{id}', [PreviousSessionController::class, 'destroy'])->name('previous-sessions.destroy');
-        Route::post('previous-sessions/bulk-delete', [PreviousSessionController::class, 'bulkDelete'])->name('previous-sessions.bulk-delete');
-        Route::post('previous-sessions/clear-old', [PreviousSessionController::class, 'clearOldRecords'])->name('previous-sessions.clear-old');
+Route::get('previous-sessions/export', [PreviousSessionController::class, 'export'])->name('previous-sessions.export');
+Route::get('previous-sessions/{id}', [PreviousSessionController::class, 'show'])->name('previous-sessions.show');
+Route::post('previous-sessions/{id}/resend-certificate', [PreviousSessionController::class, 'resendCertificate'])->name('previous-sessions.resend-certificate');
+Route::delete('previous-sessions/{id}', [PreviousSessionController::class, 'destroy'])->name('previous-sessions.destroy');
+Route::post('previous-sessions/bulk-delete', [PreviousSessionController::class, 'bulkDelete'])->name('previous-sessions.bulk-delete');
+
+
+Route::get('previous-sessions/export', [PreviousSessionController::class, 'export'])->name('previous-sessions.export');
+
 
         // Announcement Routes
-Route::resource('announcements', AnnouncementController::class);
-Route::get('announcements/{id}/toggle-status', [AnnouncementController::class, 'toggleStatus'])
-    ->name('announcements.toggle-status');
-Route::get('get-active-announcements', [AnnouncementController::class, 'getActive'])
-    ->name('announcements.get-active');
-    
-    
-        });
+        Route::resource('announcements', AnnouncementController::class);
+        Route::get('announcements/{id}/toggle-status', [AnnouncementController::class, 'toggleStatus'])
+            ->name('announcements.toggle-status');
+        Route::get('get-active-announcements', [AnnouncementController::class, 'getActive'])
+            ->name('announcements.get-active');
+    });
 });
 
 // ==================== AUTH ROUTES ====================
@@ -127,11 +135,11 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 });
 
+// ==================== OTHER ROUTES ====================
+Route::get('/fetch-cities', [CityController::class, 'fetchCities'])->name('fetch.cities');
+Route::get('/login-city-stats', [AuthenticatedSessionController::class, 'getCityStats'])->name('login.city.stats');
+
 // ==================== FALLBACK ROUTE (MUST BE LAST) ====================
 Route::fallback(function () {
     return redirect()->route('home');
 });
-
-
-Route::get('/fetch-cities', [CityController::class, 'fetchCities'])->name('fetch.cities');
-Route::get('/login-city-stats', [AuthenticatedSessionController::class, 'getCityStats'])->name('login.city.stats');

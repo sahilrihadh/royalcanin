@@ -15,7 +15,7 @@
       <i class="fas fa-plus"></i> Create Poll
     </a>
   </div>
-  <div class="card-body">
+  <div class="card-body p-0">
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       {{ session('success') }}

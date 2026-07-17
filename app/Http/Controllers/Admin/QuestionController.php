@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use App\Exports\QuestionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Events\QuestionAnswered;
 
@@ -22,6 +24,12 @@ class QuestionController extends Controller
         ];
 
         return view('admin.questions.index', compact('questions', 'stats'));
+    }
+    
+    public function export()
+    {
+        $questions = Question::with('user')->orderBy('created_at', 'desc')->get();
+        return Excel::download(new QuestionsExport($questions), 'questions_export_' . date('Y-m-d_H-i') . '.xlsx');
     }
     
     public function show($id)
@@ -47,8 +55,6 @@ class QuestionController extends Controller
                 'answered_at' => now()
             ]);
             
-            // Broadcast event ONLY when answering (not on edit)
-            // Or broadcast on both - your choice
             broadcast(new QuestionAnswered($question))->toOthers();
             
             $message = $wasAnswered ? 'Answer updated successfully!' : 'Answer submitted successfully!';
@@ -81,32 +87,6 @@ class QuestionController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete question'
-            ], 500);
-        }
-    }
-    
-    public function bulkDelete(Request $request)
-    {
-        try {
-            $ids = $request->ids;
-            
-            if (empty($ids)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No records selected'
-                ], 400);
-            }
-            
-            $deleted = Question::whereIn('id', $ids)->delete();
-            
-            return response()->json([
-                'success' => true,
-                'message' => $deleted . ' questions deleted successfully!'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete questions'
             ], 500);
         }
     }

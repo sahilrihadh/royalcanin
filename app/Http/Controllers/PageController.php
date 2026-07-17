@@ -493,11 +493,12 @@ class PageController extends Controller
         ]);
 
         $webinarConfig = [
-            'webinar1' => ['event_date' => '27th May 2026',      'template' => 'assets/img/Certificate1.png'],
-            'webinar2' => ['event_date' => '10th November 2026', 'template' => 'assets/img/Certificate_10_November.png'],
-            'webinar3' => ['event_date' => '24th November 2026', 'template' => 'assets/img/Certificate_24_November.png'],
-            'webinar4' => ['event_date' => '15th October 2026',  'template' => 'assets/img/Certificate_15_Oct.png'],
-            'webinar5' => ['event_date' => '26th November 2026', 'template' => 'assets/img/Certificate_26_Nov.png'],
+            'webinar1' => ['event_date' => '27th May 2026',      'template' => 'assets/img/Certificate_27_May.png'],
+            'webinar2' => ['event_date' => '26th June 2026', 'template' => 'assets/img/Certificate_26_June.png'],
+            'webinar3' => ['event_date' => '22nd July 2026', 'template' => 'assets/img/Certificate_22_July.png'],
+            'webinar4' => ['event_date' => '19th August 2026',  'template' => 'assets/img/Certificate_19_August.png'],
+            'webinar5' => ['event_date' => '23rd September 2026', 'template' => 'assets/img/Certificate_23_September.png'],
+            'webinar6' => ['event_date' => '21st October 2026', 'template' => 'assets/img/Certificate_21_October.png'],   
         ];
 
         if (!isset($webinarConfig[$request->webinarId])) {
