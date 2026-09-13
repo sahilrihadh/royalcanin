@@ -217,8 +217,10 @@ $(document).ready(function() {
   var votes = @json($poll->options->map(function($option) use ($totalVotes) {
     return $totalVotes > 0 ? round(($option->vote_count / $totalVotes) * 100, 1) : 0;
   }));
-  var colors = ['#6993ff', '#008080', '#e3242b', '#ffbd59', '#050357', '#28a745', '#dc3545', '#17a2b8'];
-  
+  var colors = ['#3e6df0', '#17d6bf', '#e5484d', '#d9a441', '#4aa3ff', '#2ecf8f', '#a78bfa', '#f472b6'];
+  var gridColor = 'rgba(255, 255, 255, 0.08)';
+  var textColor = '#9799ac';
+
   var chart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -227,7 +229,7 @@ $(document).ready(function() {
         label: 'Vote Percentage (%)',
         data: votes,
         backgroundColor: colors.slice(0, options.length),
-        borderColor: '#333',
+        borderColor: 'transparent',
         borderWidth: 1
       }]
     },
@@ -238,21 +240,28 @@ $(document).ready(function() {
         y: {
           beginAtZero: true,
           max: 100,
+          grid: { color: gridColor },
+          ticks: { color: textColor },
           title: {
             display: true,
-            text: 'Percentage (%)'
+            text: 'Percentage (%)',
+            color: textColor
           }
         },
         x: {
+          grid: { color: gridColor },
+          ticks: { color: textColor },
           title: {
             display: true,
-            text: 'Poll Options'
+            text: 'Poll Options',
+            color: textColor
           }
         }
       },
       plugins: {
         legend: {
           position: 'top',
+          labels: { color: textColor }
         },
         tooltip: {
           callbacks: {

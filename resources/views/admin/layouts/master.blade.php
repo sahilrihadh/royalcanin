@@ -17,12 +17,18 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="{{ asset('assets/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/admin-custom.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/admin-light-theme.css') }}" rel="stylesheet" />
 
   <!-- SweetAlert2 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+  <!-- Toastr CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
   <!----------------- Fontawesome ------------>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  @vite(['resources/css/app.css'])
 
   @stack('styles')
 </head>
@@ -36,6 +42,19 @@
     <div id="layoutSidenav_content">
       <main>
         <div class="container-fluid p-4">
+          @hasSection('page-title')
+            <div class="page-header">
+              <h1>@yield('page-title')</h1>
+              @hasSection('breadcrumb')
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    @yield('breadcrumb')
+                  </ol>
+                </nav>
+              @endif
+            </div>
+          @endif
           @yield('content')
         </div>
       </main>

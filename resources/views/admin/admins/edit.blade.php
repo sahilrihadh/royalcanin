@@ -3,6 +3,11 @@
 @section('title', 'Edit Admin User')
 @section('page-title', 'Edit Admin User')
 
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('admin.admins.index') }}">Admin Users</a></li>
+<li class="breadcrumb-item active">Edit</li>
+@endsection
+
 @section('content')
 <div class="card">
   <div class="card-header">

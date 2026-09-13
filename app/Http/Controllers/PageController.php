@@ -493,7 +493,7 @@ class PageController extends Controller
         ]);
 
         $webinarConfig = [
-            'webinar1' => ['event_date' => '27th May 2026',      'template' => 'assets/img/Certificate_27_May.png'],
+            'webinar1' => ['event_date' => '27th May 2026',      'template' => 'assets/img/Certificate1.png'],
             'webinar2' => ['event_date' => '26th June 2026', 'template' => 'assets/img/Certificate_26_June.png'],
             'webinar3' => ['event_date' => '22nd July 2026', 'template' => 'assets/img/Certificate_22_July.png'],
             'webinar4' => ['event_date' => '19th August 2026',  'template' => 'assets/img/Certificate_19_August.png'],

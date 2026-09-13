@@ -6,14 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Royal Canin Admin Login</title>
+  <title>ADMIN :: Login</title>
 
   <!-------------- Fonts ------------------>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/admin-custom.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -27,6 +28,7 @@
             <div class="card bg-dark text-white" style="border-radius: 1rem;">
               <div class="card-body p-5 text-center">
                 <div class="mb-md-4 mt-md-4">
+                  <img src="{{ asset('assets/img/rc-logo.png') }}" width="120" class="img-fluid mb-4" alt="Royal Canin">
                   <h2 class="fw-bold mb-4 text-uppercase">ADMIN LOGIN</h2>
 
                   @if($errors->any())

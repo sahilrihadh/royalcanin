@@ -9,90 +9,87 @@
 @endsection
 
 @section('content')
-<div class="card">
-  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-    <h5 class="mb-0">Session Participants</h5>
-    <div>
-      <a href="{{ route('admin.previous-sessions.export', ['session_name' => $sessionName]) }}" class="btn btn-sm btn-success">
-        <i class="fas fa-file-excel"></i> Export Excel
-      </a>
-    </div>
-  </div>
-  <div class="card-body">
 
-    <!-- Webinar filter buttons -->
-    <div class="mb-4 d-flex flex-wrap gap-2">
+<div class="flex items-center justify-end mb-4">
+  <a href="{{ route('admin.previous-sessions.export', ['session_name' => $sessionName]) }}" class="inline-flex items-center gap-2 border border-[#ebebee] text-[#09090b] hover:bg-gray-50 font-semibold text-sm px-4 py-2 rounded-lg">
+    <i class="fas fa-file-excel"></i> Export Excel
+  </a>
+</div>
+
+<div class="bg-white border border-[#ebebee] rounded-xl overflow-hidden">
+  <div class="p-4 border-b border-[#ebebee]">
+    <h2 class="font-semibold text-[#09090b] mb-3">Session Participants</h2>
+
+    <!-- Webinar filter chips -->
+    <div class="flex flex-wrap gap-2">
       <a href="{{ route('admin.previous-sessions.index') }}"
-         class="btn btn-sm {{ !$sessionName ? 'btn-primary' : 'btn-outline-primary' }}">
+         class="text-sm font-semibold px-3 py-1.5 rounded-lg {{ !$sessionName ? 'bg-blue-600 text-white' : 'border border-[#ebebee] text-[#09090b] hover:bg-gray-50' }}">
         All
       </a>
       @foreach($webinars as $webinar)
       <a href="{{ route('admin.previous-sessions.index', ['session_name' => $webinar]) }}"
-         class="btn btn-sm {{ $sessionName === $webinar ? 'btn-primary' : 'btn-outline-primary' }}">
+         class="text-sm font-semibold px-3 py-1.5 rounded-lg {{ $sessionName === $webinar ? 'bg-blue-600 text-white' : 'border border-[#ebebee] text-[#09090b] hover:bg-gray-50' }}">
         {{ ucfirst($webinar) }}
       </a>
       @endforeach
     </div>
+  </div>
 
-    <!-- Sessions Table -->
-    <div class="card">
-      <div class="card-header">
-        <h5 class="mb-0">Session Participants List</h5>
-      </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Webinar</th>
-                <th>Watched On</th>
-                <th>Certificate</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse($sessions as $session)
-              <tr>
-                <td>{{ $session->id }}</td>
-                <td>{{ $session->name }}</td>
-                <td>{{ $session->email_id }}</td>
-                <td>{{ ucfirst($session->session_name) }}</td>
-                <td>{{ $session->watched_on ? $session->watched_on->format('d M Y H:i') : 'N/A' }}</td>
-                <td>
-                  @if($session->certificate_status == 1)
-                    <span class="badge bg-success">Sent</span>
-                  @else
-                    <span class="badge bg-warning">Pending</span>
-                  @endif
-                </td>
-                <td>
-                  @if($session->certificate_status != 1)
-                    <button class="btn btn-sm btn-primary resend-certificate" data-id="{{ $session->id }}">
-                      <i class="fas fa-envelope"></i>
-                    </button>
-                  @endif
-                  <button class="btn btn-sm btn-danger delete-single" data-id="{{ $session->id }}">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-              @empty
-              <tr>
-                <td colspan="7" class="text-center">No sessions found</td>
-              </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">ID</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Name</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Email</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Webinar</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Watched On</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Certificate</th>
+          <th class="px-4 py-3 w-24"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($sessions as $session)
+        <tr class="border-b border-[#ebebee] hover:bg-gray-50">
+          <td class="px-4 py-3 text-[#09090b]">{{ $session->id }}</td>
+          <td class="px-4 py-3 text-[#09090b] font-medium">{{ $session->name }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ $session->email_id }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ ucfirst($session->session_name) }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ $session->watched_on ? $session->watched_on->format('d M Y H:i') : 'N/A' }}</td>
+          <td class="px-4 py-3">
+            @if($session->certificate_status == 1)
+              @include('admin.partials.status-pill', ['label' => 'Sent', 'color' => 'success'])
+            @else
+              @include('admin.partials.status-pill', ['label' => 'Pending', 'color' => 'warning'])
+            @endif
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-1.5">
+              @if($session->certificate_status != 1)
+              <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-[#ebebee] text-[#09090b] hover:bg-gray-50 resend-certificate" data-id="{{ $session->id }}">
+                <i class="fas fa-envelope"></i>
+              </button>
+              @endif
+              <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-red-500 hover:bg-red-50 delete-single" data-id="{{ $session->id }}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="7" class="text-center py-8 text-gray-500">No sessions found</td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
 
-    <div class="d-flex justify-content-center mt-4">
-      {{ $sessions->appends(['session_name' => $sessionName])->links() }}
-    </div>
+  <div class="border-t border-[#ebebee]">
+    @include('admin.partials.pagination', [
+      'paginator' => $sessions->appends(['session_name' => $sessionName]),
+      'perPage' => 20,
+    ])
   </div>
 </div>
 @endsection

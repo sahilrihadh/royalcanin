@@ -17,5 +17,15 @@ export default {
         },
     },
 
+    corePlugins: {
+        // Tailwind's `.collapse` utility (visibility: collapse, for table rows)
+        // shares its class name with Bootstrap's `.collapse` component (used by
+        // accordions/modals on the public pages that load both frameworks).
+        // Since neither app currently uses Tailwind's visible/invisible/collapse
+        // utilities, disabling them avoids Tailwind's rule winning the cascade
+        // and leaving Bootstrap-collapsed content permanently invisible.
+        visibility: false,
+    },
+
     plugins: [forms],
 };

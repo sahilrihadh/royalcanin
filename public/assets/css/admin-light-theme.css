@@ -1,0 +1,686 @@
+/* ==========================================================================
+   Admin Light Theme
+   Clean, card-based light theme for the admin section (Metronic-style
+   reference). Shared components — .card, .table, .toolbar-bar, .status-pill,
+   .avatar-circle, .kpi-card, .pagination-bar — so the same look can be
+   reused across every admin page, not just the one it's first applied to.
+   Loaded after admin.css / admin-custom.css so it overrides their colors
+   without touching layout mechanics (sidebar/topnav positioning etc).
+   ========================================================================== */
+
+:root {
+  --adm-bg: #f6f7fa;
+  --adm-card-bg: #ffffff;
+  --adm-border: #e7e9f1;
+  --adm-text: #1e2129;
+  --adm-text-muted: #7b7f8c;
+  --adm-text-faint: #a6a9b4;
+  --adm-primary: #3b82f6;
+  --adm-primary-hover: #2f6fe0;
+  --adm-primary-soft-bg: #eaf1ff;
+  --adm-primary-soft-text: #3b82f6;
+  --adm-success: #17c964;
+  --adm-success-soft-bg: #e7f9ee;
+  --adm-success-soft-text: #12a350;
+  --adm-danger: #f1416c;
+  --adm-danger-soft-bg: #fdeef2;
+  --adm-danger-soft-text: #e0245e;
+  --adm-warning: #f5a524;
+  --adm-warning-soft-bg: #fef6e6;
+  --adm-warning-soft-text: #b9790a;
+  --adm-info: #3e97ff;
+  --adm-info-soft-bg: #eaf4ff;
+  --adm-info-soft-text: #2f7fe0;
+}
+
+/* ---- Base ---- */
+body {
+  background-color: var(--adm-bg);
+  color: var(--adm-text);
+}
+
+a {
+  color: var(--adm-primary);
+}
+
+.text-muted {
+  color: var(--adm-text-muted) !important;
+}
+
+/* ---- Top navbar ---- */
+.sb-topnav.bg-dark {
+  background-color: var(--adm-card-bg) !important;
+  border-bottom: 1px solid var(--adm-border);
+}
+
+.sb-topnav .navbar-brand,
+.sb-topnav #sidebarToggle,
+.sb-topnav .nav-link {
+  color: var(--adm-text) !important;
+}
+
+.sb-topnav .dropdown-menu {
+  background-color: var(--adm-card-bg);
+  border: 1px solid var(--adm-border);
+  box-shadow: 0 4px 16px rgba(24, 28, 50, .08);
+}
+
+.sb-topnav .dropdown-item {
+  color: var(--adm-text);
+}
+
+.sb-topnav .dropdown-item:hover,
+.sb-topnav .dropdown-item:focus {
+  background-color: var(--adm-bg);
+  color: var(--adm-text);
+}
+
+.sb-topnav .dropdown-divider {
+  border-color: var(--adm-border);
+}
+
+/* ---- Sidebar ---- */
+.sb-sidenav-dark {
+  background-color: var(--adm-card-bg);
+  border-right: 1px solid var(--adm-border);
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link {
+  color: var(--adm-text-muted);
+  background: transparent;
+  border-bottom: none;
+  border-radius: 8px;
+  margin: 2px 12px;
+  width: auto;
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
+  color: var(--adm-text);
+  background-color: var(--adm-bg);
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link.active {
+  color: var(--adm-text);
+  font-weight: 600;
+  background-color: var(--adm-bg);
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-nav-link-icon {
+  color: inherit;
+}
+
+.sb-sidenav-footer {
+  background-color: var(--adm-card-bg) !important;
+  color: var(--adm-text-muted);
+  border-top: 1px solid var(--adm-border);
+}
+
+/* ---- Page header ---- */
+.page-header h1 {
+  color: var(--adm-text);
+  font-weight: 700;
+}
+
+.page-header .breadcrumb {
+  background: transparent;
+  padding: 0;
+}
+
+.page-header .breadcrumb-item,
+.page-header .breadcrumb-item a {
+  color: var(--adm-text-muted);
+  font-size: .8rem;
+}
+
+.page-header .breadcrumb-item.active {
+  color: var(--adm-text);
+}
+
+/* ---- Cards ---- */
+.card {
+  background-color: var(--adm-card-bg);
+  border: 1px solid var(--adm-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(24, 28, 50, .04);
+}
+
+.card .card {
+  box-shadow: none;
+}
+
+.card-header {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--adm-border) !important;
+  color: var(--adm-text);
+  padding: 1rem 1.25rem;
+}
+
+.card-header h5,
+.card-header h6,
+.card-header .card-title {
+  color: var(--adm-text);
+  font-weight: 600;
+}
+
+.card.bg-light {
+  background-color: var(--adm-bg) !important;
+  border: 1px solid var(--adm-border);
+}
+
+/* ---- Stat / KPI cards ---- */
+.stats-card {
+  background-color: var(--adm-card-bg);
+  border: 1px solid var(--adm-border);
+  border-radius: 12px;
+}
+
+.stats-card h6 {
+  color: var(--adm-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.stats-card h2 {
+  color: var(--adm-text);
+  font-weight: 700;
+}
+
+.kpi-card {
+  background-color: var(--adm-card-bg);
+  border: 1px solid var(--adm-border);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card .kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: var(--adm-accent-color, var(--adm-primary));
+}
+
+.kpi-card .kpi-value {
+  color: var(--adm-text);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.kpi-card .kpi-label {
+  color: var(--adm-text-muted);
+  font-size: .85rem;
+  margin-top: .15rem;
+}
+
+.kpi-card.kpi-primary { --adm-accent-color: var(--adm-primary); }
+.kpi-card.kpi-success { --adm-accent-color: var(--adm-success); }
+.kpi-card.kpi-warning { --adm-accent-color: var(--adm-warning); }
+.kpi-card.kpi-danger { --adm-accent-color: var(--adm-danger); }
+.kpi-card.kpi-info { --adm-accent-color: var(--adm-info); }
+
+/* ---- Toolbar (search / filter / sort row above a table) ---- */
+.toolbar-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--adm-border);
+}
+
+.toolbar-bar .toolbar-summary {
+  font-weight: 600;
+  color: var(--adm-text);
+  white-space: nowrap;
+}
+
+.toolbar-bar .toolbar-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+}
+
+.toolbar-bar .toolbar-controls .form-control,
+.toolbar-bar .toolbar-controls .form-select {
+  min-width: 160px;
+}
+
+.toolbar-bar .search-input-wrap {
+  position: relative;
+}
+
+.toolbar-bar .search-input-wrap .fa-search {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--adm-text-faint);
+  font-size: .8rem;
+  pointer-events: none;
+}
+
+.toolbar-bar .search-input-wrap input {
+  padding-left: 32px;
+  min-width: 220px;
+}
+
+.btn-filters {
+  background-color: var(--adm-primary-soft-bg);
+  color: var(--adm-primary-soft-text);
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.btn-filters:hover {
+  background-color: #dfeaff;
+  color: var(--adm-primary-soft-text);
+}
+
+/* ---- Tables ---- */
+.table {
+  color: var(--adm-text);
+  --bs-table-bg: transparent;
+  margin-bottom: 0;
+}
+
+.card .table > thead > tr > th {
+  background-color: var(--adm-bg);
+  color: var(--adm-text-muted);
+  border-color: var(--adm-border);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .04em;
+  font-weight: 600;
+}
+
+.table > :not(caption) > * > * {
+  border-bottom-color: var(--adm-border);
+  background-color: transparent;
+  color: var(--adm-text);
+}
+
+.table-bordered,
+.table-bordered > :not(caption) > * > * {
+  border-color: var(--adm-border);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: transparent;
+  color: var(--adm-text);
+}
+
+.table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: var(--adm-bg);
+  color: var(--adm-text);
+}
+
+/* ---- Member cell (avatar + name + email) ---- */
+.member-cell {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: .9rem;
+  text-transform: uppercase;
+}
+
+.member-cell .member-name {
+  font-weight: 600;
+  color: var(--adm-text);
+  line-height: 1.3;
+}
+
+.member-cell .member-email {
+  color: var(--adm-text-muted);
+  font-size: .8rem;
+  line-height: 1.3;
+}
+
+/* ---- Status pill ---- */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .7rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.status-pill .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-pill.status-success {
+  background-color: var(--adm-success-soft-bg);
+  color: var(--adm-success-soft-text);
+}
+
+.status-pill.status-success .status-dot {
+  background-color: var(--adm-success);
+}
+
+.status-pill.status-danger {
+  background-color: var(--adm-danger-soft-bg);
+  color: var(--adm-danger-soft-text);
+}
+
+.status-pill.status-danger .status-dot {
+  background-color: var(--adm-danger);
+}
+
+.status-pill.status-info {
+  background-color: var(--adm-info-soft-bg);
+  color: var(--adm-info-soft-text);
+}
+
+.status-pill.status-info .status-dot {
+  background-color: var(--adm-info);
+}
+
+.status-pill.status-warning {
+  background-color: var(--adm-warning-soft-bg);
+  color: var(--adm-warning-soft-text);
+}
+
+.status-pill.status-warning .status-dot {
+  background-color: var(--adm-warning);
+}
+
+.status-pill.status-muted {
+  background-color: var(--adm-bg);
+  color: var(--adm-text-muted);
+}
+
+.status-pill.status-muted .status-dot {
+  background-color: var(--adm-text-faint);
+}
+
+/* ---- Row kebab action menu ---- */
+.btn-kebab {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--adm-text-muted);
+  border-radius: 8px;
+}
+
+.btn-kebab:hover {
+  background-color: var(--adm-bg);
+  color: var(--adm-text);
+}
+
+/* ---- Buttons ---- */
+.btn-primary {
+  background-color: var(--adm-primary);
+  border-color: var(--adm-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--adm-primary-hover);
+  border-color: var(--adm-primary-hover);
+}
+
+.btn-outline-primary {
+  color: var(--adm-primary);
+  border-color: var(--adm-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--adm-primary);
+  border-color: var(--adm-primary);
+}
+
+/* ---- Toggle switch (kept from prior pass; still used on Polls/Announcements/Admins) ---- */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #d7dae2;
+  border-radius: 24px;
+  transition: background-color .15s ease;
+}
+
+.toggle-switch .toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform .15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--adm-primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-switch input:disabled + .toggle-slider {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* ---- Forms ---- */
+.form-control,
+.form-select,
+textarea.form-control {
+  background-color: var(--adm-card-bg);
+  border: 1px solid var(--adm-border);
+  color: var(--adm-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--adm-card-bg);
+  border-color: var(--adm-primary);
+  color: var(--adm-text);
+  box-shadow: 0 0 0 .2rem rgba(59, 130, 246, .12);
+}
+
+.form-control::placeholder {
+  color: var(--adm-text-faint);
+}
+
+.form-label {
+  color: var(--adm-text);
+}
+
+.form-text {
+  color: var(--adm-text-muted) !important;
+}
+
+.invalid-feedback {
+  color: var(--adm-danger);
+}
+
+.is-invalid {
+  border-color: var(--adm-danger) !important;
+}
+
+/* ---- Alerts ---- */
+.alert {
+  border: 1px solid transparent;
+  border-left-width: 4px;
+  border-radius: 8px;
+}
+
+.alert-success {
+  background-color: var(--adm-success-soft-bg);
+  border-color: var(--adm-success);
+  color: var(--adm-success-soft-text);
+}
+
+.alert-danger {
+  background-color: var(--adm-danger-soft-bg);
+  border-color: var(--adm-danger);
+  color: var(--adm-danger-soft-text);
+}
+
+.alert-warning {
+  background-color: var(--adm-warning-soft-bg);
+  border-color: var(--adm-warning);
+  color: var(--adm-warning-soft-text);
+}
+
+.alert-info {
+  background-color: var(--adm-info-soft-bg);
+  border-color: var(--adm-info);
+  color: var(--adm-info-soft-text);
+}
+
+/* ---- Custom pagination bar ---- */
+.pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+}
+
+.pagination-bar .per-page-select {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: var(--adm-text-muted);
+  font-size: .85rem;
+}
+
+.pagination-bar .per-page-select select {
+  width: auto;
+  padding: .25rem 1.75rem .25rem .6rem;
+}
+
+.pagination-bar .pagination-info {
+  color: var(--adm-text-muted);
+  font-size: .85rem;
+}
+
+.pagination-bar .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.pagination-bar .page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 .5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--adm-border);
+  background-color: var(--adm-card-bg);
+  color: var(--adm-text);
+  font-size: .85rem;
+  text-decoration: none;
+}
+
+.pagination-bar .page-btn:hover {
+  background-color: var(--adm-bg);
+  color: var(--adm-text);
+}
+
+.pagination-bar .page-btn.active {
+  background-color: var(--adm-bg);
+  border-color: var(--adm-border);
+  font-weight: 700;
+}
+
+.pagination-bar .page-btn.disabled {
+  color: var(--adm-text-faint);
+  pointer-events: none;
+}
+
+.pagination-bar .page-ellipsis {
+  color: var(--adm-text-faint);
+  padding: 0 .25rem;
+}
+
+/* ---- Pagination (Laravel default ->links(), kept for pages not yet on pagination-bar) ---- */
+.page-link {
+  background-color: var(--adm-card-bg);
+  border-color: var(--adm-border);
+  color: var(--adm-text);
+}
+
+.page-link:hover {
+  background-color: var(--adm-bg);
+  border-color: var(--adm-border);
+  color: var(--adm-text);
+}
+
+.page-item.active .page-link {
+  background-color: var(--adm-primary);
+  border-color: var(--adm-primary);
+  color: #fff;
+}
+
+.page-item.disabled .page-link {
+  background-color: var(--adm-card-bg);
+  border-color: var(--adm-border);
+  color: var(--adm-text-faint);
+}
+
+/* ---- Modals ---- */
+.modal-content {
+  background-color: var(--adm-card-bg);
+  color: var(--adm-text);
+  border: 1px solid var(--adm-border);
+  border-radius: 12px;
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--adm-border);
+}

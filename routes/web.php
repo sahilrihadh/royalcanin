@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\LoginDetailController;
 use App\Http\Controllers\Admin\PreviousSessionController;
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\ReminderController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -102,6 +103,10 @@ Route::get('previous-sessions/export', [PreviousSessionController::class, 'expor
             ->name('announcements.toggle-status');
         Route::get('get-active-announcements', [AnnouncementController::class, 'getActive'])
             ->name('announcements.get-active');
+
+        // Reminder Email Routes
+        Route::get('reminders', [ReminderController::class, 'index'])->name('reminders.index');
+        Route::post('reminders/send-batch', [ReminderController::class, 'sendBatch'])->name('reminders.send-batch');
     });
 });
 

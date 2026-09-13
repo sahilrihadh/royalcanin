@@ -3,6 +3,11 @@
 @section('title', 'Create Announcement')
 @section('page-title', 'Create New Announcement')
 
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('admin.announcements.index') }}">Announcements</a></li>
+<li class="breadcrumb-item active">Create</li>
+@endsection
+
 @section('content')
 <div class="card">
   <div class="card-header">

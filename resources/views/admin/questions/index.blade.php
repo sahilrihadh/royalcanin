@@ -9,115 +9,90 @@
 
 @section('content')
 
-<!-- Statistics Cards -->
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card stats-card">
-            <div class="card-body card-body d-flex flex-column justify-content-center align-items-center text-center">
-                <h5 class="card-title">Total Questions</h5>
-                <h3 class="mb-0">{{ $stats['total'] }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card stats-card">
-            <div class="card-body card-body d-flex flex-column justify-content-center align-items-center text-center">
-                <h5 class="card-title">Answered</h5>
-                <h3 class="mb-0">{{ $stats['answered'] }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card stats-card">
-            <div class="card-body card-body d-flex flex-column justify-content-center align-items-center text-center">
-                <h5 class="card-title">Pending</h5>
-                <h3 class="mb-0">{{ $stats['pending'] }}</h3>
-            </div>
-        </div>
-    </div>
+<div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
+  <div class="flex flex-wrap gap-3">
+    @include('admin.partials.stat-card', ['icon' => 'fa-list', 'value' => $stats['total'], 'label' => 'Total Questions'])
+    @include('admin.partials.stat-card', ['icon' => 'fa-check', 'value' => $stats['answered'], 'label' => 'Answered'])
+    @include('admin.partials.stat-card', ['icon' => 'fa-clock', 'value' => $stats['pending'], 'label' => 'Pending'])
+  </div>
 </div>
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">All Questions & Answers</h5>
-        <a href="{{ route('admin.questions.export') }}" class="btn btn-success btn-sm">
-            <i class="fas fa-file-excel"></i> Export to Excel
-        </a>
-    </div>
-    <div class="card-body p-0">
-        <!-- Questions Table -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="questionsTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User</th>
-                        <th>Email</th>
-                        <th width="30%">Question</th>
-                        <th width="30%">Answer / Reply</th>
-                        <th>Status</th>
-                        <th>Submitted</th>
-                        <th width="120">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($questions as $question)
-                    <tr id="question-row-{{ $question->id }}">
-                        <td>{{ $question->id }}</td>
-                        <td>
-                            <strong>{{ $question->user->full_name ?? $question->user->name ?? 'N/A' }}</strong>
-                        </td>
-                        <td>{{ $question->user->email_id ?? $question->user->email ?? 'N/A' }}</td>
-                        <td>
-                            <div style="word-wrap: break-word;">
-                                {{ $question->question_text ?? $question->question_input }}
-                            </div>
-                        </td>
-                        <td id="answer-cell-{{ $question->id }}">
-                            @if($question->is_answered)
-                                <div class="answer-box p-2 bg-light rounded">
-                                    <p class="mb-0">{{ Str::limit($question->answer_text, 100) }}</p>
-                                </div>
-                            @else
-                                <span class="badge bg-warning">Awaiting answer</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="badge status-badge-{{ $question->id }} {{ $question->is_answered ? 'bg-success' : 'bg-warning' }}">
-                                {{ $question->is_answered ? 'Answered' : 'Pending' }}
-                            </span>
-                        </td>
-                        <td>{{ $question->created_at->format('d M Y h:i A') }}</td>
-                        <td>
-                            <div class="d-flex gap-1" role="group">
-                                <button class="btn btn-outline-primary answer-question" 
-                                        data-id="{{ $question->id }}"
-                                        data-question="{{ $question->question_text ?? $question->question_input }}"
-                                        data-user="{{ $question->user->full_name ?? $question->user->name ?? 'N/A' }}"
-                                        data-current-answer="{{ $question->answer_text ?? '' }}">
-                                    <i class="fas fa-{{ $question->is_answered ? 'edit' : 'reply' }}"></i>
-                                </button>
-                                <button class="btn btn-outline-danger delete-question" 
-                                        data-id="{{ $question->id }}"
-                                        data-question="{{ Str::limit($question->question_text ?? $question->question_input, 50) }}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="text-center">No questions found</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+<div class="flex items-center justify-end mb-4">
+  <a href="{{ route('admin.questions.export') }}" class="inline-flex items-center gap-2 border border-[#ebebee] text-[#09090b] hover:bg-gray-50 font-semibold text-sm px-4 py-2 rounded-lg">
+    <i class="fas fa-file-excel"></i> Export to Excel
+  </a>
+</div>
 
-        <div class="d-flex justify-content-center mt-4">
-            {{ $questions->links() }}
-        </div>
-    </div>
+<div class="bg-white border border-[#ebebee] rounded-xl overflow-hidden">
+  <div class="p-4 border-b border-[#ebebee]">
+    <h2 class="font-semibold text-[#09090b]">All Questions &amp; Answers</h2>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left" id="questionsTable">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">ID</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">User</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Email</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide w-[25%]">Question</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide w-[25%]">Answer / Reply</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Status</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Submitted</th>
+          <th class="px-4 py-3 w-24"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($questions as $question)
+        <tr id="question-row-{{ $question->id }}" class="border-b border-[#ebebee] hover:bg-gray-50">
+          <td class="px-4 py-3 text-[#09090b]">{{ $question->id }}</td>
+          <td class="px-4 py-3 text-[#09090b] font-medium">{{ $question->user->full_name ?? $question->user->name ?? 'N/A' }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ $question->user->email_id ?? $question->user->email ?? 'N/A' }}</td>
+          <td class="px-4 py-3 text-[#09090b] break-words">{{ $question->question_text ?? $question->question_input }}</td>
+          <td class="px-4 py-3 text-[#09090b]" id="answer-cell-{{ $question->id }}">
+            @if($question->is_answered)
+              <div class="bg-gray-50 border border-[#ebebee] rounded-lg p-2 text-sm">{{ Str::limit($question->answer_text, 100) }}</div>
+            @else
+              @include('admin.partials.status-pill', ['label' => 'Awaiting answer', 'color' => 'warning'])
+            @endif
+          </td>
+          <td class="px-4 py-3" id="status-cell-{{ $question->id }}">
+            @if($question->is_answered)
+              @include('admin.partials.status-pill', ['label' => 'Answered', 'color' => 'success'])
+            @else
+              @include('admin.partials.status-pill', ['label' => 'Pending', 'color' => 'warning'])
+            @endif
+          </td>
+          <td class="px-4 py-3 text-[#09090b] whitespace-nowrap">{{ $question->created_at->format('d M Y h:i A') }}</td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-1.5">
+              <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-[#ebebee] text-[#09090b] hover:bg-gray-50 answer-question"
+                      data-id="{{ $question->id }}"
+                      data-question="{{ $question->question_text ?? $question->question_input }}"
+                      data-user="{{ $question->user->full_name ?? $question->user->name ?? 'N/A' }}"
+                      data-current-answer="{{ $question->answer_text ?? '' }}">
+                <i class="fas fa-{{ $question->is_answered ? 'edit' : 'reply' }}"></i>
+              </button>
+              <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-red-500 hover:bg-red-50 delete-question"
+                      data-id="{{ $question->id }}"
+                      data-question="{{ Str::limit($question->question_text ?? $question->question_input, 50) }}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="8" class="text-center py-8 text-gray-500">No questions found</td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+
+  <div class="border-t border-[#ebebee]">
+    @include('admin.partials.pagination', ['paginator' => $questions, 'perPage' => 20])
+  </div>
 </div>
 
 <!-- Answer Modal -->
@@ -158,7 +133,7 @@
 $(document).ready(function() {
     let currentQuestionId = null;
     let isEditing = false;
-    
+
     // Answer button click (works for both Reply and Edit)
     $('.answer-question').on('click', function() {
         currentQuestionId = $(this).data('id');
@@ -166,10 +141,10 @@ $(document).ready(function() {
         const questionText = $(this).data('question');
         const currentAnswer = $(this).data('current-answer');
         const hasAnswer = currentAnswer && currentAnswer.trim() !== '';
-        
+
         $('#modalUserName').text(userName);
         $('#modalQuestionText').text(questionText);
-        
+
         if (hasAnswer) {
             $('#answerModalTitle').text('Edit Answer');
             $('#answerLabel').text('Edit Your Answer:');
@@ -183,14 +158,14 @@ $(document).ready(function() {
             $('#submitBtnText').text('Submit Answer');
             isEditing = false;
         }
-        
+
         $('#answerModal').modal('show');
     });
-    
+
     // Submit/Update Answer
     $('#submitAnswer').on('click', function() {
         var answerText = $('#answerText').val().trim();
-        
+
         if (!answerText) {
             Swal.fire({
                 icon: 'warning',
@@ -201,9 +176,9 @@ $(document).ready(function() {
             });
             return;
         }
-        
+
         const actionText = isEditing ? 'update' : 'submit';
-        
+
         Swal.fire({
             title: isEditing ? 'Update Answer?' : 'Submit Answer?',
             text: isEditing ? "This will update the existing answer." : "This answer will be visible to the user.",
@@ -217,7 +192,7 @@ $(document).ready(function() {
                 const $btn = $('#submitAnswer');
                 const originalText = $btn.html();
                 $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
-                
+
                 $.ajax({
                     url: '/admin/questions/' + currentQuestionId + '/answer',
                     type: 'POST',
@@ -229,7 +204,7 @@ $(document).ready(function() {
                         if (response.success) {
                             // Update the table row without reload
                             updateQuestionRow(currentQuestionId, answerText);
-                            
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -269,45 +244,46 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     // Update question row dynamically
     function updateQuestionRow(questionId, answerText) {
         const $row = $('#question-row-' + questionId);
         const $answerCell = $('#answer-cell-' + questionId);
-        const $statusBadge = $('.status-badge-' + questionId);
-        
+        const $statusCell = $('#status-cell-' + questionId);
+
         // Update answer cell
         $answerCell.html(`
-            <div class="answer-box p-2 bg-light rounded">
-                <p class="mb-0">${escapeHtml(answerText.substring(0, 100))}${answerText.length > 100 ? '...' : ''}</p>
-            </div>
+            <div class="bg-gray-50 border border-[#ebebee] rounded-lg p-2 text-sm">${escapeHtml(answerText.substring(0, 100))}${answerText.length > 100 ? '...' : ''}</div>
         `);
-        
-        // Update status badge
-        $statusBadge.removeClass('bg-warning').addClass('bg-success');
-        $statusBadge.text('Answered');
-        
+
+        // Update status pill
+        $statusCell.html(`
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border bg-emerald-50 border-emerald-200 text-emerald-600">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Answered
+            </span>
+        `);
+
         // Update the action button
         const $actionBtn = $row.find('.answer-question');
         $actionBtn.html('<i class="fas fa-edit"></i>');
         $actionBtn.data('current-answer', answerText);
-        
+
         // Show success toast
         toastr.success('Answer updated successfully!', 'Success');
     }
-    
+
     // Escape HTML helper
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-    
+
     // Delete single record
     $(document).on('click', '.delete-question', function() {
         var id = $(this).data('id');
         var questionText = $(this).data('question');
-        
+
         Swal.fire({
             title: 'Are you sure?',
             text: "Delete question: \"" + questionText + "\"?",
@@ -329,7 +305,7 @@ $(document).ready(function() {
                             $('#question-row-' + id).fadeOut(300, function() {
                                 $(this).remove();
                             });
-                            
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Deleted!',
@@ -352,7 +328,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
 });
 </script>
 @endpush

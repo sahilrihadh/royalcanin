@@ -8,102 +8,105 @@
 @endsection
 
 @section('content')
-<div class="card">
-  <div class="card-header">
-    <h5 class="mb-0">Login History</h5>
-  </div>
-  <div class="card-body">
-    <!-- Date Filter -->
-    <form method="GET" action="{{ route('admin.login-details.index') }}" class="mb-4">
-      <div class="row align-items-end">
-        <div class="col-md-3">
-          <label class="form-label">Start Date</label>
-          <input type="date" name="start_date" class="form-control" value="{{ $startDate }}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">End Date</label>
-          <input type="date" name="end_date" class="form-control" value="{{ $endDate }}">
-        </div>
-        <div class="col-md-6">
-          <button type="submit" class="btn btn-primary">
-            <i class="fas fa-filter"></i> Filter
-          </button>
-          <a href="{{ route('admin.login-details.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-success">
-            <i class="fas fa-file-excel"></i> Export Excel
-          </a>
-          <a href="{{ route('admin.login-details.index') }}" class="btn btn-secondary">
-            <i class="fas fa-sync"></i> Reset
-          </a>
-          <a href="{{ route('admin.login-details.attendance') }}" class="btn btn-dark">
-            <i class="fas fa-sync"></i> Unique Attendance
-          </a>
-        </div>
+
+<div class="flex items-center justify-end gap-2 mb-4">
+  <a href="{{ route('admin.login-details.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+     class="inline-flex items-center gap-2 border border-[#ebebee] text-[#09090b] hover:bg-gray-50 font-semibold text-sm px-4 py-2 rounded-lg">
+    <i class="fas fa-file-excel"></i> Export Excel
+  </a>
+  <a href="{{ route('admin.login-details.attendance') }}"
+     class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2 rounded-lg">
+    <i class="fas fa-user-check"></i> Unique Attendance
+  </a>
+</div>
+
+<div class="bg-white border border-[#ebebee] rounded-xl overflow-hidden">
+  <div class="p-4 border-b border-[#ebebee]">
+    <form method="GET" action="{{ route('admin.login-details.index') }}" class="flex flex-wrap items-end gap-3">
+      <div>
+        <label class="block text-xs font-medium text-[#09090b] mb-1">Start Date</label>
+        <input type="date" name="start_date" value="{{ $startDate }}"
+               class="border border-[#ebebee] rounded-lg text-sm px-3 py-2 text-[#09090b] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
       </div>
+      <div>
+        <label class="block text-xs font-medium text-[#09090b] mb-1">End Date</label>
+        <input type="date" name="end_date" value="{{ $endDate }}"
+               class="border border-[#ebebee] rounded-lg text-sm px-3 py-2 text-[#09090b] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+      </div>
+      <button type="submit" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2 rounded-lg">
+        <i class="fas fa-filter"></i> Filter
+      </button>
+      <a href="{{ route('admin.login-details.index') }}"
+         class="inline-flex items-center gap-2 border border-[#ebebee] text-[#09090b] hover:bg-gray-50 font-semibold text-sm px-4 py-2 rounded-lg">
+        <i class="fas fa-rotate-left"></i> Reset
+      </a>
     </form>
+  </div>
 
-    <!-- Login Details Table -->
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>User</th>
-            <th>Email</th>
-            <th>Login Time</th>
-            <th>Logout Time</th>
-            <th>Duration</th>
-            <th>Status</th>
-            <th width="100">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($loginDetails as $index => $detail)
-          <tr>
-            <td>{{ $loginDetails->firstItem() + $index }}</td>
-            <td>{{ $detail->user->full_name ?? 'Unknown' }}</td>
-            <td>{{ $detail->user->email_id ?? 'Unknown' }}</td>
-            <td>{{ $detail->login_time ? $detail->login_time->format('d M Y H:i:s') : 'N/A' }}</td>
-            <td>
-              @if($detail->logout_time)
-                {{ $detail->logout_time->format('d M Y H:i:s') }}
-              @else
-                <span class="badge bg-success">Active</span>
-              @endif
-            </td>
-            <td>
-              @if($detail->login_time && $detail->logout_time)
-                {{ $detail->login_time->diffInMinutes($detail->logout_time) }} min
-              @elseif($detail->login_time && !$detail->logout_time)
-                {{ $detail->login_time->diffInMinutes(now()) }} min (active)
-              @else
-                -
-              @endif
-            </td>
-            <td>
-              @if($detail->logout_time)
-                <span class="badge bg-secondary">Logged Out</span>
-              @else
-                <span class="badge bg-success">Active</span>
-              @endif
-            </td>
-            <td>
-              <button class="btn btn-sm btn-danger delete-single" data-id="{{ $detail->id }}">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-          @empty
-          <tr>
-            <td colspan="8" class="text-center">No login records found for the selected date range</td>
-          </tr>
-          @endforelse
-        </tbody>
-      </table>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead>
+        <tr class="bg-gray-50">
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">#</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">User</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Email</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Login Time</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Logout Time</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Duration</th>
+          <th class="px-4 py-3 text-[#09090b] opacity-60 uppercase text-xs font-semibold tracking-wide">Status</th>
+          <th class="px-4 py-3 w-12"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($loginDetails as $index => $detail)
+        <tr class="border-b border-[#ebebee] hover:bg-gray-50">
+          <td class="px-4 py-3 text-[#09090b]">{{ $loginDetails->firstItem() + $index }}</td>
+          <td class="px-4 py-3 text-[#09090b] font-medium">{{ $detail->user->full_name ?? 'Unknown' }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ $detail->user->email_id ?? 'Unknown' }}</td>
+          <td class="px-4 py-3 text-[#09090b]">{{ $detail->login_time ? $detail->login_time->format('d M Y H:i:s') : 'N/A' }}</td>
+          <td class="px-4 py-3 text-[#09090b]">
+            @if($detail->logout_time)
+              {{ $detail->logout_time->format('d M Y H:i:s') }}
+            @else
+              @include('admin.partials.status-pill', ['label' => 'Active', 'color' => 'success'])
+            @endif
+          </td>
+          <td class="px-4 py-3 text-[#09090b]">
+            @if($detail->login_time && $detail->logout_time)
+              {{ $detail->login_time->diffInMinutes($detail->logout_time) }} min
+            @elseif($detail->login_time && !$detail->logout_time)
+              {{ $detail->login_time->diffInMinutes(now()) }} min (active)
+            @else
+              -
+            @endif
+          </td>
+          <td class="px-4 py-3">
+            @if($detail->logout_time)
+              @include('admin.partials.status-pill', ['label' => 'Logged Out', 'color' => 'neutral'])
+            @else
+              @include('admin.partials.status-pill', ['label' => 'Active', 'color' => 'success'])
+            @endif
+          </td>
+          <td class="px-4 py-3">
+            <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-red-500 hover:bg-red-50 delete-single" data-id="{{ $detail->id }}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="8" class="text-center py-8 text-gray-500">No login records found for the selected date range</td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
 
-    <div class="d-flex justify-content-center mt-4">
-      {{ $loginDetails->appends(['start_date' => $startDate, 'end_date' => $endDate])->links() }}
-    </div>
+  <div class="border-t border-[#ebebee]">
+    @include('admin.partials.pagination', [
+      'paginator' => $loginDetails->appends(['start_date' => $startDate, 'end_date' => $endDate]),
+      'perPage' => 20,
+    ])
   </div>
 </div>
 @endsection
@@ -114,7 +117,7 @@ $(document).ready(function() {
     // Delete single record
     $(document).on('click', '.delete-single', function() {
         var id = $(this).data('id');
-        
+
         Swal.fire({
             title: 'Are you sure?',
             text: "You want to delete this login record?",

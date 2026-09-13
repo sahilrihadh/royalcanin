@@ -20,15 +20,54 @@ class UserController extends Controller
         // Get total users
         $totalUsers = User::count();
 
-        // Get paginated users
-        $users = User::orderBy('created_at', 'desc')
-            ->paginate(20);
+        $search = trim((string) $request->query('search', ''));
+        $status = $request->query('status', 'all');
+        $sort = $request->query('sort', 'newest');
+        $perPage = (int) $request->query('per_page', 10);
+        if (!in_array($perPage, [10, 20, 50], true)) {
+            $perPage = 10;
+        }
+
+        $query = User::query();
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                    ->orWhere('email_id', 'like', "%{$search}%")
+                    ->orWhere('mobile_number', 'like', "%{$search}%")
+                    ->orWhere('clinic_name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status === 'online') {
+            $query->where('last_seen_at', '>=', $onlineThreshold);
+        } elseif ($status === 'offline') {
+            $query->where(function ($q) use ($onlineThreshold) {
+                $q->whereNull('last_seen_at')->orWhere('last_seen_at', '<', $onlineThreshold);
+            });
+        }
+
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'name_asc':
+                $query->orderBy('full_name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('full_name', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+        }
+
+        $users = $query->paginate($perPage)->withQueryString();
 
         if ($request->ajax()) {
             return response()->json($users);
         }
 
-        return view('admin.users.index', compact('users', 'onlineUsers', 'totalUsers'));
+        return view('admin.users.index', compact('users', 'onlineUsers', 'totalUsers', 'search', 'status', 'sort', 'perPage'));
     }
 
     public function destroy($id)

@@ -8094,3 +8094,4 @@
 #22 {main}
 "} 
 [2026-07-17 02:06:31] local.INFO: Certificate generated for: Dr. Mohd Sahil  
+[2026-09-11 12:33:43] local.ERROR: Certificate template not found: assets/img/Certificate_22_July.png  

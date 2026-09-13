@@ -2,6 +2,11 @@
   <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
     <div class="sb-sidenav-menu">
       <div class="nav">
+        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+          <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+          Dashboard
+        </a>
+
         <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users') }}">
           <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
           Users
@@ -30,6 +35,11 @@
   <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
   Announcements
 </a>
+
+        <a class="nav-link {{ request()->routeIs('admin.reminders.*') ? 'active' : '' }}" href="{{ route('admin.reminders.index') }}">
+          <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+          Reminder Email
+        </a>
         <!-- Only show Admin User link for super admins -->
         @if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->isSuperAdmin())
           <a class="nav-link {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}" href="{{ route('admin.admins.index') }}">
@@ -38,14 +48,6 @@
           </a>
         @endif
       </div>
-    </div>
-    <div class="sb-sidenav-footer">
-      <div class="small">Logged in as:</div>
-      {{ Auth::guard('admin')->user()->username ?? Auth::guard('admin')->user()->full_name }}
-      <form method="POST" action="{{ route('admin.logout') }}" class="mt-2">
-        @csrf
-        <button type="submit" class="btn btn-sm btn-danger w-100">Logout</button>
-      </form>
     </div>
   </nav>
 </div>

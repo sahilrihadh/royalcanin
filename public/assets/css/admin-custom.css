@@ -159,3 +159,18 @@ td.actions {
 .card table tr:first-child th {
     border-top: 0px solid rgba(0, 0, 0, 0.125);
 }
+.page-header {
+    margin-bottom: 1.5rem;
+}
+.page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+.page-header .breadcrumb {
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+.gradient-custom {
+    background: linear-gradient(135deg, #7a1414 0%, #dc2626 50%, #7a1414 100%);
+}

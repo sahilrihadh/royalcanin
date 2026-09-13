@@ -1,44 +1,46 @@
 @extends('admin.layouts.master')
 
 @section('title', 'Dashboard')
+@section('page-title', 'Dashboard')
 
 @section('content')
-<div class="container-fluid px-4">
-  <h1 class="mt-4">Dashboard</h1>
-
   <div class="row">
     <div class="col-xl-3 col-md-6">
-      <div class="card bg-primary text-white mb-4">
+      <div class="kpi-card kpi-primary mb-4">
         <div class="card-body">
-          <h3>{{ $totalUsers }}</h3>
-          <p>Total Users</p>
+          <div class="kpi-icon"><i class="fas fa-users"></i></div>
+          <div class="kpi-value">{{ $totalUsers }}</div>
+          <div class="kpi-label">Total Users</div>
         </div>
       </div>
     </div>
 
     <div class="col-xl-3 col-md-6">
-      <div class="card bg-success text-white mb-4">
+      <div class="kpi-card kpi-success mb-4">
         <div class="card-body">
-          <h3>{{ $totalWebinars }}</h3>
-          <p>Total Webinars</p>
+          <div class="kpi-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <div class="kpi-value">{{ $totalWebinars }}</div>
+          <div class="kpi-label">Total Webinars</div>
         </div>
       </div>
     </div>
 
     <div class="col-xl-3 col-md-6">
-      <div class="card bg-warning text-white mb-4">
+      <div class="kpi-card kpi-warning mb-4">
         <div class="card-body">
-          <h3>{{ $totalPolls }}</h3>
-          <p>Total Polls</p>
+          <div class="kpi-icon"><i class="fas fa-poll"></i></div>
+          <div class="kpi-value">{{ $totalPolls }}</div>
+          <div class="kpi-label">Total Polls</div>
         </div>
       </div>
     </div>
 
     <div class="col-xl-3 col-md-6">
-      <div class="card bg-danger text-white mb-4">
+      <div class="kpi-card kpi-danger mb-4">
         <div class="card-body">
-          <h3>{{ $totalCertificates }}</h3>
-          <p>Certificates Issued</p>
+          <div class="kpi-icon"><i class="fas fa-certificate"></i></div>
+          <div class="kpi-value">{{ $totalCertificates }}</div>
+          <div class="kpi-label">Certificates Issued</div>
         </div>
       </div>
     </div>
@@ -103,5 +105,4 @@
       </div>
     </div>
   </div>
-</div>
 @endsection
