@@ -1,10 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 // ==================== GUEST ROUTES ====================
 Route::middleware('guest')->group(function () {
@@ -16,30 +15,16 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
 
+    // Create/Reset Password Routes (email -> OTP -> new password)
+    Route::get('create-password', [PasswordController::class, 'create'])->name('password.create');
+    Route::post('create-password/send-otp', [PasswordController::class, 'sendOtp'])
+        ->middleware('throttle:6,1')
+        ->name('password.sendOtp');
+    Route::post('create-password/verify-otp', [PasswordController::class, 'verifyOtp'])
+        ->middleware('throttle:10,1')
+        ->name('password.verifyOtp');
+    Route::post('create-password/set', [PasswordController::class, 'setPassword'])->name('password.set');
+
     // AJAX Routes
     Route::get('/fetch-cities', [RegisteredUserController::class, 'fetchCities'])->name('fetch.cities');
 });
-
-// ==================== CUSTOM LOGIN PROCESS (AJAX) ====================
-Route::post('/login-process', function (LoginRequest $request) {
-    try {
-        $request->authenticate();
-        $request->session()->regenerate();
-
-        if (!Auth::check()) {
-            throw new \Exception('Authentication failed');
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Login successful!',
-            'redirect_url' => route('webcast'),
-            'user' => Auth::user()->email_id
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 401);
-    }
-})->name('login.process')->middleware('guest');

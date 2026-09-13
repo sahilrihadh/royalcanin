@@ -27,10 +27,24 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse|JsonResponse
     {
         // Log the incoming request data for debugging
-        \Log::info('Login request data:', $request->all());
-        
-        $request->authenticate();
-        $request->session()->regenerate();
+        \Log::info('Login request data:', $request->except('password'));
+
+        $result = $request->authenticate();
+
+        if ($result['status'] === 'password_not_set') {
+            $redirectUrl = route('password.create', ['email' => $result['user']->email_id]);
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'needs_password_setup' => true,
+                    'message' => 'No password has been created for this account yet. Please create your password to continue.',
+                    'redirect_url' => $redirectUrl,
+                ]);
+            }
+
+            return redirect($redirectUrl);
+        }
 
         // Get user after authentication
         $user = Auth::user();

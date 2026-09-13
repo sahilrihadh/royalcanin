@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -20,16 +21,23 @@ class LoginRequest extends FormRequest
     {
         return [
             'email_id' => ['required', 'string', 'email'],
+            'password' => ['nullable', 'string'],
             'city' => ['nullable', 'string', 'max:255'],
         ];
     }
 
-    public function authenticate(): void
+    /**
+     * Attempt to authenticate the request's credentials.
+     *
+     * Returns 'password_not_set' when the account exists but has never
+     * created a password yet, so the controller can send them to the
+     * create-password flow instead of a generic "invalid credentials" error.
+     */
+    public function authenticate(): array
     {
         $this->ensureIsNotRateLimited();
 
-        // Find user by email_id column (your column name)
-        $user = \App\Models\User::where('email_id', $this->email_id)->first();
+        $user = User::where('email_id', $this->email_id)->first();
 
         if (!$user) {
             RateLimiter::hit($this->throttleKey());
@@ -38,12 +46,21 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Login the user (no password needed as per your requirement)
-        Auth::login($user, true);
-        RateLimiter::clear($this->throttleKey());
+        if (empty($user->password)) {
+            return ['status' => 'password_not_set', 'user' => $user];
+        }
 
-        // Regenerate session ID to prevent fixation
+        if (!Auth::attempt(['email_id' => $this->email_id, 'password' => $this->password], true)) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'password' => 'The provided credentials do not match our records.',
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
         $this->session()->regenerate();
+
+        return ['status' => 'authenticated', 'user' => $user];
     }
 
     public function ensureIsNotRateLimited(): void

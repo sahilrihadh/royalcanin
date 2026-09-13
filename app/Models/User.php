@@ -31,6 +31,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
+        'password',
         'remember_token',
     ];
 
@@ -48,11 +49,6 @@ class User extends Authenticatable
     public function getAuthIdentifierName()
     {
         return 'email_id';
-    }
-
-    public function getAuthPassword()
-    {
-        return null;
     }
 
     // Relationships

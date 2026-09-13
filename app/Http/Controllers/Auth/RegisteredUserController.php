@@ -9,7 +9,6 @@ use App\Mail\RegistrationConfirmation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -49,14 +48,10 @@ class RegisteredUserController extends Controller
         // Generate full name
         $fullName = $request->name_prefix . ' ' . $request->first_name . ' ' . $request->last_name;
 
-        // Generate a random password since user will login via email only
-        $randomPassword = bin2hex(random_bytes(8));
-
         $user = User::create([
             'name_prefix' => $request->name_prefix,
             'full_name' => $fullName,
             'email_id' => $request->email,
-            'password' => Hash::make($randomPassword),
             'mobile_number' => $request->mobile_number,
             'registration_number' => $request->registration_number,
             'clinic_name' => $request->clinic_name,

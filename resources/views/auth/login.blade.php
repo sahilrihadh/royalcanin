@@ -114,6 +114,18 @@
                            </template>
                         </div>
 
+                        <div class="mb-2">
+                           <label class="form-label">Password</label>
+                           <input type="password" x-model="form.password" class="form-control custom-input" placeholder="Password" required>
+                           <template x-if="errors.password">
+                              <div class="text-danger small mt-1" x-text="errors.password[0]"></div>
+                           </template>
+                        </div>
+
+                        <div class="mb-4 text-end">
+                           <a href="{{ route('password.create') }}" class="small">Create/Forgot your password?</a>
+                        </div>
+
                         <!-- City Input with Autocomplete -->
                         <div class="mb-4">
                            <label class="form-label">City/Town</label>
@@ -159,6 +171,7 @@
    return {
       form: {
          email_id: '',
+         password: '',
          city: '',
       },
       errors: {},
@@ -193,6 +206,14 @@
             return;
          }
 
+         if (!this.form.password) {
+            this.message.type = 'danger';
+            this.message.text = 'Please enter your password.';
+            this.message.show = true;
+            this.loading = false;
+            return;
+         }
+
          // Validate city
          if (!this.form.city) {
             this.message.type = 'danger';
@@ -215,6 +236,7 @@
          // Make API request with city data
          axios.post('{{ route("login") }}', {
             email_id: this.form.email_id,
+            password: this.form.password,
             city: this.form.city
          })
          .then(response => {
@@ -227,6 +249,14 @@
                setTimeout(() => {
                   window.location.href = response.data.redirect_url;
                }, 1000);
+            } else if (response.data.needs_password_setup) {
+               this.message.type = 'warning';
+               this.message.text = response.data.message + ' Redirecting...';
+               this.message.show = true;
+
+               setTimeout(() => {
+                  window.location.href = response.data.redirect_url;
+               }, 1200);
             } else {
                this.message.type = 'danger';
                this.message.text = response.data.message;
