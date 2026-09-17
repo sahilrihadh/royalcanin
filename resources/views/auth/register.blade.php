@@ -116,6 +116,28 @@
                            </template>
                         </div>
 
+                        <div class="col-md-6 mt-3">
+                           <input type="password" x-model="form.password" class="form-control" placeholder="Password *">
+                           <template x-if="errors.password">
+                              <div class="text-danger small" x-text="errors.password[0]"></div>
+                           </template>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                           <input type="password" x-model="form.password_confirmation" class="form-control" placeholder="Confirm Password *">
+                        </div>
+
+                        <div class="col-12 mt-2" x-show="form.password.length > 0">
+                           <ul class="password-rules mb-0">
+                              <li :class="{ valid: passwordRules.length }">At least 8 characters</li>
+                              <li :class="{ valid: passwordRules.upper }">One uppercase letter</li>
+                              <li :class="{ valid: passwordRules.lower }">One lowercase letter</li>
+                              <li :class="{ valid: passwordRules.number }">One number</li>
+                              <li :class="{ valid: passwordRules.special }">One special character</li>
+                              <li :class="{ valid: passwordRules.match }">Passwords match</li>
+                           </ul>
+                        </div>
+
                         <!-- City Dropdown with Autocomplete -->
                         <div class="col-md-6 city-dropdown mt-3">
                            <input type="text" class="form-control" id="citySelect" 
@@ -192,6 +214,8 @@
                registration_number: '',
                mobile_number: '',
                email: '',
+               password: '',
+               password_confirmation: '',
                clinic_name: '',
                city: '',
                state: '',
@@ -209,7 +233,33 @@
             stateReadonly: false,
             citySelected: false,
 
+            get passwordRules() {
+               const p = this.form.password;
+               return {
+                  length: p.length >= 8,
+                  upper: /[A-Z]/.test(p),
+                  lower: /[a-z]/.test(p),
+                  number: /[0-9]/.test(p),
+                  special: /[^A-Za-z0-9]/.test(p),
+                  match: p.length > 0 && p === this.form.password_confirmation,
+               };
+            },
+
+            get passwordValid() {
+               const r = this.passwordRules;
+               return r.length && r.upper && r.lower && r.number && r.special && r.match;
+            },
+
             submitForm() {
+               if (!this.passwordValid) {
+                  this.errors = { password: ['Please make sure your password meets all the requirements above.'] };
+                  this.message.type = 'danger';
+                  this.message.text = 'Please fix the errors below.';
+                  this.message.show = true;
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  return;
+               }
+
                this.loading = true;
                this.errors = {};
                this.message.show = false;
@@ -314,6 +364,21 @@
    <style>
       [x-cloak] {
          display: none !important;
+      }
+
+      .password-rules {
+         list-style: none;
+         padding-left: 0;
+         margin-bottom: 0;
+         display: flex;
+         flex-wrap: wrap;
+         gap: 4px 16px;
+         font-size: 0.78rem;
+         color: #6c757d;
+      }
+
+      .password-rules li.valid {
+         color: #198754;
       }
       
       /* Custom styles for autocomplete */

@@ -9,7 +9,9 @@ use App\Mail\RegistrationConfirmation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -35,6 +37,7 @@ class RegisteredUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email_id'],
+            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
             'mobile_number' => ['required', 'string', 'size:10'],
             'registration_number' => ['nullable', 'string', 'max:255'],
             'clinic_name' => ['required', 'string', 'max:255'],
@@ -61,6 +64,9 @@ class RegisteredUserController extends Controller
             'sale_consent' => $request->sale_consent ?? false,
             'research_consent' => $request->research_consent ?? false,
         ]);
+
+        $user->password = Hash::make($request->password);
+        $user->save();
 
         event(new Registered($user));
 
