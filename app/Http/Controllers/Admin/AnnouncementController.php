@@ -42,7 +42,7 @@ class AnnouncementController extends Controller
 
         // Broadcast if status is 'show'
         if ($announcement->status === 'show') {
-            broadcast(new ShowAnnouncement($announcement))->toOthers();
+            $this->broadcastSafely(new ShowAnnouncement($announcement));
         }
 
         return redirect()->route('admin.announcements.index')
@@ -78,9 +78,9 @@ class AnnouncementController extends Controller
 
         // Handle broadcasting on update
         if ($request->status === 'show' && $oldStatus !== 'show') {
-            broadcast(new ShowAnnouncement($announcement))->toOthers();
+            $this->broadcastSafely(new ShowAnnouncement($announcement));
         } elseif ($request->status === 'hide' && $oldStatus !== 'hide') {
-            broadcast(new HideAnnouncement($announcement->id))->toOthers();
+            $this->broadcastSafely(new HideAnnouncement($announcement->id));
         }
 
         return redirect()->route('admin.announcements.index')
@@ -93,7 +93,7 @@ class AnnouncementController extends Controller
         
         // Hide the announcement before deleting
         if ($announcement->status === 'show') {
-            broadcast(new HideAnnouncement($announcement->id))->toOthers();
+            $this->broadcastSafely(new HideAnnouncement($announcement->id));
         }
         
         $announcement->delete();
@@ -113,9 +113,9 @@ class AnnouncementController extends Controller
         $announcement->save();
 
         if ($announcement->status === 'show') {
-            broadcast(new ShowAnnouncement($announcement))->toOthers();
+            $this->broadcastSafely(new ShowAnnouncement($announcement));
         } else {
-            broadcast(new HideAnnouncement($announcement->id))->toOthers();
+            $this->broadcastSafely(new HideAnnouncement($announcement->id));
         }
 
         if (request()->ajax()) {

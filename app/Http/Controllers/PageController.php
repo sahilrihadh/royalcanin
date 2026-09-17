@@ -224,7 +224,7 @@ class PageController extends Controller
             $poll->update(['is_active' => true]);
 
             $pollData = $this->getActivePoll();
-            broadcast(new PollStatusChanged($pollData));
+            $this->broadcastSafely(new PollStatusChanged($pollData));
 
             return response()->json(['success' => true, 'message' => 'Poll activated', 'poll' => $pollData]);
 
@@ -238,7 +238,7 @@ class PageController extends Controller
     {
         try {
             Poll::where('is_active', true)->update(['is_active' => false]);
-            broadcast(new PollStatusChanged(null));
+            $this->broadcastSafely(new PollStatusChanged(null));
             return response()->json(['success' => true, 'message' => 'Poll deactivated']);
         } catch (\Exception $e) {
             Log::error('deactivatePoll error: ' . $e->getMessage());

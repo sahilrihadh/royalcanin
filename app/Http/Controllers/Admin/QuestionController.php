@@ -55,7 +55,7 @@ class QuestionController extends Controller
                 'answered_at' => now()
             ]);
             
-            broadcast(new QuestionAnswered($question))->toOthers();
+            $this->broadcastSafely(new QuestionAnswered($question));
             
             $message = $wasAnswered ? 'Answer updated successfully!' : 'Answer submitted successfully!';
             

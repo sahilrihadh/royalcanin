@@ -74,7 +74,7 @@ class PollController extends Controller
             if ($isActive) {
                 $poll->load('options');
                 $pollHtml = $this->generatePollHtml($poll);
-                broadcast(new PollStatusChanged('active', $pollHtml, $poll->toArray()))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('active', $pollHtml, $poll->toArray()));
             }
 
             return redirect()->route('admin.polls.index')
@@ -167,9 +167,9 @@ class PollController extends Controller
             if ($isActive) {
                 $poll->load('options');
                 $pollHtml = $this->generatePollHtml($poll);
-                broadcast(new PollStatusChanged('active', $pollHtml, $poll->toArray()))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('active', $pollHtml, $poll->toArray()));
             } else {
-                broadcast(new PollStatusChanged('inactive', null, null))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('inactive', null, null));
             }
 
             return redirect()->route('admin.polls.index')
@@ -200,7 +200,7 @@ class PollController extends Controller
                 $pollData['options'] = $poll->options->toArray();
                 
                 // Broadcast active event with HTML
-                broadcast(new PollStatusChanged('active', $pollHtml, $pollData))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('active', $pollHtml, $pollData));
                 
                 return response()->json([
                     'success' => true,
@@ -211,7 +211,7 @@ class PollController extends Controller
                 $poll->update(['is_active' => false]);
                 
                 // Broadcast inactive event
-                broadcast(new PollStatusChanged('inactive', null, null))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('inactive', null, null));
                 
                 return response()->json([
                     'success' => true,
@@ -292,7 +292,7 @@ class PollController extends Controller
             
             // If this was active, broadcast deactivation
             if ($poll->is_active) {
-                broadcast(new PollStatusChanged('inactive', null, null))->toOthers();
+                $this->broadcastSafely(new PollStatusChanged('inactive', null, null));
             }
             
             $poll->delete();

@@ -84,7 +84,7 @@ class PollController extends Controller
             $activePoll = Poll::with('options')->find($request->poll_id);
 
             // Broadcast updated results to all users
-            broadcast(new PollStatusChanged($activePoll))->toOthers();
+            $this->broadcastSafely(new PollStatusChanged($activePoll));
 
             return response()->json([
                 'success' => true,
@@ -202,7 +202,7 @@ class PollController extends Controller
             $pollHtml = $this->generatePollHtml($poll, null);
 
             // Broadcast to all connected clients
-            broadcast(new PollStatusChanged($pollHtml));
+            $this->broadcastSafely(new PollStatusChanged($pollHtml));
 
             return response()->json([
                 'success' => true,
@@ -229,7 +229,7 @@ class PollController extends Controller
             $poll->update(['is_active' => false]);
 
             // Broadcast to all connected clients that poll is closed
-            broadcast(new PollStatusChanged(null));
+            $this->broadcastSafely(new PollStatusChanged(null));
 
             return response()->json([
                 'success' => true,
